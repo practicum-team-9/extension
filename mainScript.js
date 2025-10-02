@@ -130,7 +130,7 @@ const hideAllQuestions = (questionsArray) => {
 
 const getQuestionElements = (question) => {
     var classList = question.classList;
-    var questionType = classList[1]
+    var questionType = classList[1];
     var inputField = question.querySelectorAll("input")[0] ? question.querySelectorAll("input")[0] : question.querySelectorAll("textarea")[0];
     var questionId = inputField.id ? inputField.id : inputField.name;
     var isRequiered = question.querySelectorAll("[class*='Required']")[0] ? true : false;
@@ -138,7 +138,7 @@ const getQuestionElements = (question) => {
 
     var questionLabel = question.getElementsByClassName("QuestionLabel")[0];
     var questionTextContent = question.textContent;
-    if (questionType = "DropdownQuestion") {
+    if (questionType == "DropdownQuestion") {
         inputField = document.getElementById(questionId);
     }
 
@@ -181,9 +181,10 @@ const createLogo = () => {
 }
 
 const makeTheSpeech = (isRequiered, questionType, text) => {
-    text = text.replace("*", "")
-    text = text.replace("Обязательное поле", "")
-    var speech = ""
+    console.log(questionType)
+    text = text.replace("*", "");
+    text = text.replace("Обязательное поле", "");
+    var speech = "";
     isRequiered ? speech += "Это обязательный вопрос.\n " : speech += "Это необязательный вопрос.\n "
     switch (questionType) {
         case "TextQuestion":
@@ -196,7 +197,7 @@ const makeTheSpeech = (isRequiered, questionType, text) => {
             speech += "Это закрытый вопрос. Нажмите пробел чтобы изменить значение. Для подтверждения - нажмите Энтер\n ";
             break;
         case "DropdownQuestion":
-            speech += "Это вопрос с выпадающим списком. Нажмите пробел чтобы выбрать список и выберите значения в нем и нажмите пробел. Для подтверждения - нажмите Пробел\n ";
+            speech += "Это вопрос с выпадающим списком. Нажмите пробел чтобы выбрать список и выберите значения в нем и нажмите пробел. Для подтверждения - нажмите Энтер\n ";
             break;
         default: 
             speech += " "
