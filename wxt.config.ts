@@ -11,7 +11,14 @@ export default defineConfig({
       name: "YaForms Accessibility",
       description: "Extension to help visually impaired with Ya Forms",
       version: "1.0.0",
-      permissions: ["storage", "tabs"]
+      permissions: [
+        "activeTab",
+        "scripting",
+        "contextMenus",
+        "storage",
+        "tabs",
+        "declarativeNetRequest",
+      ]
     }
   },
   vite: (() => ({
