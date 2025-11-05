@@ -22,8 +22,12 @@ export default function Popup() {
         console.log(settingsData)
     };
 
-
-
+    const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        chrome.storage.local.set({ settingsData }, () => {
+            alert('Сохранено!')
+        })
+    }
 
     return (
         <div className="w-[500px] p-6 flex flex-col gap-6 rounded-5xl">
@@ -38,10 +42,11 @@ export default function Popup() {
             <FancyToggle onChange={handleChecked} name="isLightTheme" isChecked={settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn}>
                 <ThemeToggle textOn="Светлая тема" textOff="Темная тема" />
             </FancyToggle>
-            <h2>API-ключ для Yandex SpeechKit</h2>
+            <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
             <label>
-                <input type="text" placeholder="Введите ваш API ключ." />
+                <input type="text" name="apiKey" placeholder={settingsData.apiKey ? settingsData.apiKey :"Введите ваш API ключ."} className='text-2xl text-center bg-[#E5E5E5] rounded-2xl w-full p-1 min-h-[64px]' onChange={handleChange} />
             </label>
+            <button disabled={!settingsData.isExtensionOn} onClick={handleSubmit} className="text-2xl text-center bg-[#E5E5E5] rounded-2xl w-[50%] p-1 min-h-[64px] self-center">💾 Сохранить</button>
         </div>
     )
 }
