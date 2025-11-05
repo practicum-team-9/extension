@@ -29,8 +29,8 @@ export default function Popup() {
                 <h1 className='text-2xl'>YaForms accessibility</h1>
                 <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleChecked} />
             </div>
-            <FancyToggle isOnEmoji={"🔊"} isOnText={"Включить"} isOffEmoji={"🔈"} isOffText={"Выключить"} isOnMessage={"soundOn"} isOffMessage={"soundOff"}  />
-            <FancyToggle isOnEmoji={"☀️"} isOnText={"Светлая тема"} isOffEmoji={"🌙"} isOffText={"Темная тема"} isOnMessage={"lightTheme"} isOffMessage={"darkTheme"} />
+            <FancyToggle onChange={handleChecked} name="isSoundOn" isChecked={settingsData.isSoundOn} isDisabled={!settingsData.isExtensionOn} isOnEmoji={"🔊"} isOnText={"Включить"} isOffEmoji={"🔈"} isOffText={"Выключить"} isOnMessage={"soundOn"} isOffMessage={"soundOff"}  />
+            <FancyToggle onChange={handleChecked} name="isLightTheme" isChecked={settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn} isOnEmoji={"☀️"} isOnText={"Светлая тема"} isOffEmoji={"🌙"} isOffText={"Темная тема"} isOnMessage={"lightTheme"} isOffMessage={"darkTheme"} />
             <h2>API-ключ для Yandex SpeechKit</h2>
             <label>
                 <input type="text" placeholder="Введите ваш API ключ." />
