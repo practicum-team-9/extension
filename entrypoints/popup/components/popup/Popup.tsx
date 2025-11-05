@@ -27,9 +27,9 @@ export default function Popup() {
 
     return (
         <div className="w-[500px] p-6 flex flex-col gap-6 rounded-5xl">
-            <div className="w-[424px] h-[48px] flex justify-around">
+            <div className="w-[424px] h-[48px] flex justify-around items-center">
                 <Logo />
-                <h1 className='text-2xl'>YaForms accessibility</h1>
+                <h1 className='text-3xl text-center'>YaForms accessibility</h1>
                 <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleChecked} />
             </div>
             <FancyToggle onChange={handleChecked} name="isSoundOn" isChecked={settingsData.isSoundOn} isDisabled={!settingsData.isExtensionOn}>
