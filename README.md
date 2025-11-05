@@ -1,11 +1,13 @@
-<div id="badges" align="center">
-    <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff">
+# YaAccessibility Extension
+
+<div id="badges">
+    <img src="https://img.shields.io/badge/WXT-67d45e">
     <img src="https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB">
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff">
     <img src="https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white">
     <img src="https://img.shields.io/badge/Google%20Chrome-4285F4?logo=GoogleChrome&logoColor=white">
 </div>
 
-# YaAccessibility Extension
 # Описание проекта 
 ## Возможности
 Это расширение для браузера, которое упрощает работу с ЯФормами для слабовидящих пользователей. 
