@@ -22,6 +22,16 @@ export default function Popup() {
         console.log(settingsData)
     };
 
+
+    const handleToggleExtension = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, checked } = e.target;
+        setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
+        chrome.storage.local.set({ settingsData }, () => {
+            alert('Сохранено!')
+        })
+        console.log(settingsData)
+    };
+
     const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         chrome.storage.local.set({ settingsData }, () => {
@@ -34,7 +44,7 @@ export default function Popup() {
             <div className="w-[424px] h-[48px] flex justify-around items-center">
                 <Logo />
                 <h1 className='text-3xl text-center'>YaForms accessibility</h1>
-                <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleChecked} />
+                <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleToggleExtension} />
             </div>
             <FancyToggle onChange={handleChecked} name="isSoundOn" isChecked={settingsData.isSoundOn} isDisabled={!settingsData.isExtensionOn}>
                 <VolumeToggle textOn="Включить" textOff="Выключить" />

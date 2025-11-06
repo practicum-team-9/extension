@@ -9,8 +9,22 @@ export default defineBackground({
         contexts: ["all"],
       });
 
+      chrome.tabs.onUpdated.addListener((tabId, tab) => {
+          console.log(tab)
+          chrome.tabs.sendMessage(tabId, {
+              type: "newForm"
+          })
+          .then((res) => {
+              console.log("Message recieved!")
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      })
+
       chrome.contextMenus.onClicked.addListener(async (info, tab) => {
         if (info.menuItemId === "makeAccess") {
+          console.log(tab?.id)
           chrome.tabs.sendMessage(
             tab?.id!,
             { action: "makeAccess" },
