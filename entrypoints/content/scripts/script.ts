@@ -106,7 +106,9 @@ const hideQuestion = (question: HTMLElement) => {
 }
 
 const hideButton = (btn: HTMLButtonElement) => {
-    btn.style.display = "none";
+    if (btn) {
+        btn.style.display = "none";
+    }
 }
 
 const hideQuestionButtons = (questionId: string) => {
@@ -116,6 +118,9 @@ const hideQuestionButtons = (questionId: string) => {
             hideButton(btn);
         } else {
             console.log("This is not a button, but something else!")
+            console.log(typeof btn)
+            console.log(btn)
+
         };
     })
 }
@@ -221,10 +226,10 @@ const goToTheNextQuestion = (previous: HTMLElement, next: HTMLElement) => {
     showQuestion(next);
 }
 
-const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElement>, surveyPageButtons: NodeListOf<HTMLButtonElement>, submitButton: HTMLButtonElement) => {
+const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElement>, surveyPageButtonsContainer: HTMLElement, submitButton: HTMLButtonElement) => {
     var questionsArray = Array.from(questions);
     var nextButtonsArray: HTMLElement[] = [];
-    var surveyPageButtonsArray = Array.from(surveyPageButtons)
+    //var surveyPageButtonsArray = Array.from(surveyPageButtons)
     
     //surveyPageButtons.style.justifyContent = "space-between";
     submitButton = styleBtnAccent(submitButton)
@@ -244,8 +249,8 @@ const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElem
     }
 
     const startAgainButton = createBtn(startAgainButtonProps)
-    if (surveyPageButtonsArray) {
-        surveyPageButtonsArray.push(startAgainButton);
+    if (surveyPageButtonsContainer) {
+        surveyPageButtonsContainer.appendChild(startAgainButton);
     }
     if (submitButton) {
         submitButton.style.display = "none";
@@ -294,8 +299,8 @@ const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElem
 
         var nextButton = createBtn(nextButtonProps)
         if (questionId) {
-            surveyPageButtonsArray.push(alertButton);
-            surveyPageButtonsArray.push(nextButton);
+            surveyPageButtonsContainer.appendChild(alertButton);
+            surveyPageButtonsContainer.appendChild(nextButton);
         }
 
         if (questionIndex > 0) {
@@ -387,14 +392,15 @@ export const newFormLoaded = () => {
     //var questions = document.getElementsByClassName("QuestionMarkup Question");
     var questions = document.querySelectorAll<HTMLElement>(".QuestionMarkup.Question");
     //var surveyPageButtons = document.querySelectorAll<HTMLButtonElement>(".SurveyPage-Buttons")[0];
-    var surveyPageButtons = document.querySelectorAll<HTMLButtonElement>(".SurveyPage-Buttons");
-    var submitButton = document.querySelectorAll<HTMLButtonElement>("SurveyPage-Button")[0];
+    // 
+    var surveyPageButtonsContainer = document.querySelectorAll<HTMLElement>(".SurveyPage-Buttons")[0];
+    var submitButton = document.querySelectorAll<HTMLButtonElement>(".SurveyPage-Button")[0];
 
     if (!isLogoExist && !isButtonsExist){
         createLogo();
         stylePage();
     }
     if (!isButtonsExist ) {
-        addControls(surveyForm, questions, surveyPageButtons, submitButton);
+        addControls(surveyForm, questions, surveyPageButtonsContainer, submitButton);
     }
 }
