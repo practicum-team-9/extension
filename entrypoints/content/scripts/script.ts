@@ -379,7 +379,7 @@ const stylePage = () => {
     }
 }
 
-const newFormLoaded = () => {
+export const newFormLoaded = () => {
     // console.log("NewForm");
     var isButtonsExist = document.querySelectorAll("[id*='AlertButton']")[0] ? true : false;
     var isLogoExist = document.getElementById("extensionLogo");

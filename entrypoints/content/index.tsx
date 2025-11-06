@@ -1,6 +1,7 @@
 import "../popup/style.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { newFormLoaded } from "./scripts/script";
 
 export default defineContentScript({
   matches: ['*://*/*'],
@@ -19,12 +20,8 @@ export default defineContentScript({
     chrome.runtime.onMessage.addListener(
       async (message, sender, sendResponse) => {
       console.log("Recieved action in content script", message)
-      if (message.action === "newForm") {
-          console.log("NewForm action recieved")
-          sendResponse({ status: "New Form action handled"})
-          const formUi = await createIUI(ctx, "New Form ")
-          formUi.mount()
-      }
+      // if (message.action === "newForm") {
+      // }
       switch (message.action) {
         case "makeAccess":
           console.log("Make Access action recieved")
@@ -32,7 +29,18 @@ export default defineContentScript({
           const ui = await createUi(ctx, "message")
           ui.mount()
           break;
+
+        case "autoNewForm":
+          console.log("autoNewForm action recieved")
+          sendResponse({ status: "New Form action handled"})
+          const formUi = await createIUI(ctx, "New Form ")
+          formUi.mount()
+          break;
+
         case "newForm":
+          console.log("NewForm action recieved")
+          sendResponse({ status: "New Form action handled"})
+          newFormLoaded()
           break;
     
         default:
@@ -50,23 +58,6 @@ const createUi = async (ctx: any, message: string) => {
       onMount: (uiContainer, shadow, shadowContainer) => {
         const app = document.createElement("div");
         uiContainer.append(app); 
-
-        // const styles = {
-        //   visibility: "visible",
-        //   position: "fixed",
-        //   top: "0",
-        //   bottom: "0",
-        //   right: "0",
-        //   left: "0",
-        //   zIndex: "9999",
-        //   height: "100%",
-        //   width: "100%",
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        //   backgroundColor: "rgba(0, 0, 0, 0.5)",
-        // };
-        // Object.assign(shadowContainer.style, styles);
         const root = ReactDOM.createRoot(app);
         root.render(
           <React.StrictMode>

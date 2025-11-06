@@ -9,10 +9,16 @@ export default defineBackground({
         contexts: ["all"],
       });
 
+      chrome.contextMenus.create({
+        id: "newForm",
+        title: "Making the new form accessible",
+        contexts: ["all"],
+      });
+
       chrome.tabs.onUpdated.addListener((tabId, tab) => {
           console.log(tab)
           chrome.tabs.sendMessage(tabId, {
-              type: "newForm"
+              type: "autoNewForm"
           })
           .then((res) => {
               console.log("Message recieved!")
@@ -28,6 +34,19 @@ export default defineBackground({
           chrome.tabs.sendMessage(
             tab?.id!,
             { action: "makeAccess" },
+            function (response) {
+              console.info("Response is:", response)
+            }
+          );
+        }
+      })
+
+      chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+        if (info.menuItemId === "newForm") {
+          console.log(tab?.id)
+          chrome.tabs.sendMessage(
+            tab?.id!,
+            { action: "newForm" },
             function (response) {
               console.info("Response is:", response)
             }
