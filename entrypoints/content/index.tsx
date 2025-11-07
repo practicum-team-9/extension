@@ -2,13 +2,12 @@ import "../popup/style.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { newFormLoaded } from "./scripts/script";
-import Modal from "./modal/Modal";
 import App from "./app/App";
-import { useSettingsData } from "../hooks/useSettingsData/useSettingsData";
 
 export default defineContentScript({
   matches: ['https://forms.yandex.ru/u/*'],
   cssInjectionMode: "ui",
+  allFrames: false,
   async main(ctx) {
     if (ctx.isInvalid) {
       console.log('WARNING! Something is wrong with the context!')
@@ -16,8 +15,9 @@ export default defineContentScript({
     console.log('Hello content.');
 
     window.onload = async () => {
-          const ui = await createShadowUI(ctx, "message")
-          ui.mount()
+      console.log('WINDOWS LOADING!')
+      const ui = await createShadowUI(ctx, "message")
+      ui.mount()
     } 
 
     chrome.runtime.onMessage.addListener(
@@ -39,6 +39,7 @@ export default defineContentScript({
 
 
 const createShadowUI = async (ctx: any, message: string) => {
+  console.log('creating shadow Ui')
   return createShadowRootUi(ctx, {
       name: "make-access",
       position: "inline",

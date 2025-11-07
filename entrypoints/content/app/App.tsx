@@ -1,15 +1,27 @@
 import "@/assets/tailwind.css";
-import { ReactNode } from "react";
 import Modal from "../modal/Modal";
 import { newFormLoaded } from "../scripts/script";
 import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettingsData";
 
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
-    const { settingsData, setSettingsData } = useSettingsData();
+    const { settingsData } = useSettingsData();
+    // const [ settingsData, setSettingsData ] = useState({
+    //     isExtensionOn: true,
+    //     isSoundOn: true,
+    //     isLightTheme: true,
+    //     apiKey: ""
+    // });
+    // chrome.storage.local.get(["settingsData"], (result) => {
+    //     console.log('Loading state for App from storage')
+    //     if (result.settingsData) {
+    //         setSettingsData(result.settingsData)
+    //     }
+    // });
 
-    chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === "SAYIT!") {
+        sendResponse("Acknowledged SAYIT!");
         console.log("Received SAYIT!");
         if (settingsData.isSoundOn) {
             console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
@@ -19,21 +31,17 @@ export default function App() {
             window.speechSynthesis.speak(utterance);
         } else {
             console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
-            console.log(settingsData)
         }
-        sendResponse("Acknowledged SAYIT!");
-        return true;
       }
 
-      if (message.type === "setSettingsData") {
-        console.log("Received setSettingsData");
-        console.log(message.payload)
-        if (message.payload) {
-            setSettingsData(message.payload)
-        } 
-        sendResponse("Acknowledged setSettingsData!");
-        return true;
-      }
+      // if (message.type === "setSettingsData") {
+      //   sendResponse("Acknowledged setSettingsData!");
+      //   console.log("Received setSettingsData");
+      //   console.log(message.payload)
+      //   if (message.payload) {
+      //       setSettingsData(message.payload)
+      //   } 
+      // }
       // Return true to indicate you want to send an asynchronous response
       return true;
     });

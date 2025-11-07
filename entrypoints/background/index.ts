@@ -29,10 +29,10 @@ export default defineBackground({
         console.log("Received greeting:", message.payload);
         sendResponse("Acknowledged greeting!");
         if (sender.tab?.id) {
-            const response = await chrome.tabs.sendMessage(sender.tab.id,{ type: "SAYIT!", payload: message.payload });
-            console.log("Received response from content script:", response);
+          console.log('Sending message')
+          const response = await chrome.tabs.sendMessage(sender.tab.id,{ type: "SAYIT!", payload: message.payload });
+          console.log("Received response from content script:", response);
         }
-        return true;
       }
       // Return true to indicate you want to send an asynchronous response
       return true;

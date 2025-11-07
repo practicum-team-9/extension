@@ -1,4 +1,5 @@
 const sayTheThing = async (thing: string) => {
+    console.log('Sending a message')
     const response = await chrome.runtime.sendMessage({ type: "GREETING", payload: thing });
     console.log("Received response from background:", response);
     return true;
