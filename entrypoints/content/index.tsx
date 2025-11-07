@@ -6,7 +6,7 @@ import Modal from "./modal/Modal";
 import App from "./app/App";
 
 export default defineContentScript({
-  matches: ['*://*/*'],
+  matches: ['*://forms.yandex.ru/*'],
   cssInjectionMode: "ui",
   async main(ctx) {
     if (ctx.isInvalid) {
