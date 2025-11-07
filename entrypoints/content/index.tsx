@@ -4,9 +4,10 @@ import ReactDOM from "react-dom/client";
 import { newFormLoaded } from "./scripts/script";
 import Modal from "./modal/Modal";
 import App from "./app/App";
+import { useSettingsData } from "../hooks/useSettingsData/useSettingsData";
 
 export default defineContentScript({
-  matches: ['*://https://forms.yandex.ru/u//*'],
+  matches: ['https://forms.yandex.ru/u/*'],
   cssInjectionMode: "ui",
   async main(ctx) {
     if (ctx.isInvalid) {
@@ -21,18 +22,17 @@ export default defineContentScript({
 
     chrome.runtime.onMessage.addListener(
       async (message, sender, sendResponse) => {
-      console.log("Recieved action in content script", message)
-      switch (message.action) {
+        console.log("Recieved action in content script", message)
+        switch (message.action) {
+          case "newForm":
+            console.log("NewForm action recieved")
+            sendResponse({ status: "New Form action handled"})
+            newFormLoaded()
+            break;
 
-        case "newForm":
-          console.log("NewForm action recieved")
-          sendResponse({ status: "New Form action handled"})
-          newFormLoaded()
-          break;
-    
-        default:
-          break;
-      }
+          default:
+            break;
+        }
     })
   },
 });

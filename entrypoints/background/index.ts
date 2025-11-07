@@ -23,6 +23,49 @@ export default defineBackground({
         }
       })
 
+
+    browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+      if (message.type === "GREETING") {
+        console.log("Received greeting:", message.payload);
+        sendResponse("Acknowledged greeting!");
+        if (sender.tab?.id) {
+            const response = await chrome.tabs.sendMessage(sender.tab.id,{ type: "SAYIT!", payload: message.payload });
+            console.log("Received response from content script:", response);
+        }
+        return true;
+      }
+      // Return true to indicate you want to send an asynchronous response
+      return true;
+    });
+
+
+    browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+      if (message.type === "settingsDataChanged") {
+        console.log("Received settingsDataChanged");
+        if (message.payload) {
+          chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            if (tabs[0].id) {
+              chrome.tabs.sendMessage(tabs[0].id, { type: "setSettingsData", payload: message.payload });
+            }
+          });
+        } 
+        sendResponse("Acknowledged settingsDataChanged!");
+        return true;
+      }
+      // Return true to indicate you want to send an asynchronous response
+      return true;
+    });
+
+      // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      //     console.log('Some message recieved')
+      //     if (request.action === "sayTheThing") {
+      //         console.log("Message received in the App from content script:", request.data);
+      //         if (true) {
+      //             sendResponse({isSoundOn: true})
+      //         }
+      //     }
+      // });
+
     });
   },
 });

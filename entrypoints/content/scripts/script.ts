@@ -1,9 +1,27 @@
-const sayTheThing = (thing: string) => {
+const sayTheThing = async (thing: string) => {
+    const response = await chrome.runtime.sendMessage({ type: "GREETING", payload: thing });
+    console.log("Received response from background:", response);
+    return true;
     // Скажи фразу
-    console.log(thing)
-    var utterance = new SpeechSynthesisUtterance(thing);
-    window.speechSynthesis.speak(utterance);
-
+    // console.log(thing)
+    // var utterance = new SpeechSynthesisUtterance(thing);
+    // window.speechSynthesis.cancel()
+    // window.speechSynthesis.speak(utterance);
+    // console.log('Trying to speak ...')
+    // chrome.storage.local.get(["settingsData"], (result) => {
+    //     console.log(result.settingsData)
+    //     if (result.settingsData) {
+    //         //Скажи фразу
+    //         if (result.settingsData.isSoundOn){
+    //             console.log(thing)
+    //             var utterance = new SpeechSynthesisUtterance(thing);
+    //             window.speechSynthesis.cancel()
+    //             window.speechSynthesis.speak(utterance);
+    //         } else {
+    //             console.log('Sound is off')
+    //         }
+    //     }
+    // });
 }
 
 const styleBtnAccent = (btn: HTMLButtonElement) => {
