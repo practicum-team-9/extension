@@ -18,24 +18,21 @@ export default function App() {
     //         setSettingsData(result.settingsData)
     //     }
     // });
-
-    if (window.self === window.top && window.frameElement === null) {
-
-        browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.type === "SAYIT!") {
-            sendResponse("Acknowledged SAYIT!");
-            console.log("Received SAYIT!");
-            if (settingsData.isSoundOn) {
-                console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
-                console.log("PAYLOAD: \n", message.payload)
-                var utterance = new SpeechSynthesisUtterance(message.payload);
-                window.speechSynthesis.cancel()
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
-                window.speechSynthesis.cancel()
-            }
-        }
+    //browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      //  if (message.type === "SAYIT!") {
+      //      sendResponse("Acknowledged SAYIT!");
+      //      console.log("Received SAYIT!");
+      //      if (settingsData.isSoundOn) {
+      //          console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
+      //          console.log("PAYLOAD: \n", message.payload)
+      //          var utterance = new SpeechSynthesisUtterance(message.payload);
+      //          window.speechSynthesis.cancel()
+      //          window.speechSynthesis.speak(utterance);
+      //      } else {
+      //          console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
+      //          window.speechSynthesis.cancel()
+      //      }
+      //  }
 
       // if (message.type === "setSettingsData") {
       //   sendResponse("Acknowledged setSettingsData!");
@@ -46,9 +43,8 @@ export default function App() {
       //   } 
       // }
       // Return true to indicate you want to send an asynchronous response
-        return true;
-        });
-    }
+        // return true;
+    //});
 
     const hideModal = () => {
         setIsModalVisible(false)
