@@ -20,7 +20,22 @@ export default defineContentScript({
       try {
         chrome.storage.local.get(["settingsData"], async (result) => {
           console.log('Getting data from storage')
-          if (result.settingsData.isExtensionOn) {
+          console.log(result)
+          console.log(result.settingsData)
+          const isLightThemeOn = window.matchMedia("(prefers-color-scheme: light)").matches;
+          console.log('Current theme is light :', isLightThemeOn)
+          if (!result.settingsData) {
+            console.log('Settings data does not exist yet!\nCREATING!')
+            chrome.storage.local.set({"settingsData": {
+              isExtensionOn: true,
+              isSoundOn: true,
+              isLightTheme: isLightThemeOn,
+              apiKey: ""
+            }}, () => {
+                console.log('Settings created!')
+            })
+            ui.mount()
+          } else if (result.settingsData.isExtensionOn) {
             ui.mount()            
           } else {
             console.log('The extension is off!')
@@ -28,18 +43,18 @@ export default defineContentScript({
         });
       } catch (e) {
         console.log('Error occured while trying to fetch data from storage.')
-        console.log('')
+        console.log(e)
         ui.mount()            
       }
-      chrome.storage.local.get(["settingsData"], async (result) => {
-        console.log('Getting data from storage')
-        if (result.settingsData.isExtensionOn) {
-          const ui = await createShadowUI(ctx, "message")
-          ui.mount()            
-        } else {
-          console.log('The extension is off!')
-        }
-      });
+      // chrome.storage.local.get(["settingsData"], async (result) => {
+      //   console.log('Getting data from storage')
+      //   if (result.settingsData.isExtensionOn) {
+      //     const ui = await createShadowUI(ctx, "message")
+      //     ui.mount()            
+      //   } else {
+      //     console.log('The extension is off!')
+      //   }
+      // });
     } 
 
     chrome.runtime.onMessage.addListener(
