@@ -19,20 +19,23 @@ export default function App() {
     //     }
     // });
 
-    browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.type === "SAYIT!") {
-        sendResponse("Acknowledged SAYIT!");
-        console.log("Received SAYIT!");
-        if (settingsData.isSoundOn) {
-            console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
-            console.log("PAYLOAD: \n", message.payload)
-            var utterance = new SpeechSynthesisUtterance(message.payload);
-            window.speechSynthesis.cancel()
-            window.speechSynthesis.speak(utterance);
-        } else {
-            console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
+    if (window.self === window.top && window.frameElement === null) {
+
+        browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.type === "SAYIT!") {
+            sendResponse("Acknowledged SAYIT!");
+            console.log("Received SAYIT!");
+            if (settingsData.isSoundOn) {
+                console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
+                console.log("PAYLOAD: \n", message.payload)
+                var utterance = new SpeechSynthesisUtterance(message.payload);
+                window.speechSynthesis.cancel()
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
+                window.speechSynthesis.cancel()
+            }
         }
-      }
 
       // if (message.type === "setSettingsData") {
       //   sendResponse("Acknowledged setSettingsData!");
@@ -43,8 +46,9 @@ export default function App() {
       //   } 
       // }
       // Return true to indicate you want to send an asynchronous response
-      return true;
-    });
+        return true;
+        });
+    }
 
     const hideModal = () => {
         setIsModalVisible(false)
@@ -57,9 +61,9 @@ export default function App() {
                 console.log('Button clicked!');
                 hideModal();
                 newFormLoaded();
-                }} className="text-3xl bg-black text-white pt-2 pb-2 pl-4 pr-4 text-center justify-center rounded-2xl border border-black">Начать</button>
-                <button onClick={hideModal} type="button" className="text-3xl bg-white text-black pt-2 pb-2 pl-4 pr-4 text-center justify-center rounded-2xl border border-black">
-                Выключить расширение
+                }} className="text-3xl bg-black text-white pt-2 pb-2 pl-4 pr-4 text-center justify-center border border-black rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer hover:border-[#262626] hover:bg-[#262626] focus:bg-[#262626]/85">Начать</button>
+                <button onClick={hideModal} type="button" className="text-3xl bg-white text-black pt-2 pb-2 pl-4 pr-4 text-center justify-center rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer border border-black">
+                Закрыть
                 </button>
             </Modal>
         </div>

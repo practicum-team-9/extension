@@ -16,8 +16,15 @@ export default defineContentScript({
 
     window.onload = async () => {
       console.log('WINDOWS LOADING!')
-      const ui = await createShadowUI(ctx, "message")
-      ui.mount()
+      chrome.storage.local.get(["settingsData"], async (result) => {
+        console.log('Getting data from storage')
+        if (result.settingsData.isExtensionOn) {
+          const ui = await createShadowUI(ctx, "message")
+          ui.mount()            
+        } else {
+          console.log('The extension is off!')
+        }
+      });
     } 
 
     chrome.runtime.onMessage.addListener(
