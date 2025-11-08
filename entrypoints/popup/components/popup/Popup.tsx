@@ -20,24 +20,35 @@ export default function Popup() {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
         console.log(settingsData)
+        console.log(checked)
     };
 
 
     const handleToggleExtension = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
+        handleChecked(e)
         chrome.storage.local.set({ settingsData }, () => {
             alert('Сохранено!')
         })
         console.log(settingsData)
     };
 
-    const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+        console.log('SAVING SETTINGS DATA')
+        console.log(settingsData)
         e.preventDefault();
         chrome.storage.local.set({ settingsData }, () => {
-            alert('Сохранено!')
-        })
+            alert('Сохранено! Для применения перезагрузите сстраницу!')
+        })        
+        const response = await chrome.runtime.sendMessage({ type: "settingsDataChanged", payload: settingsData });
+        console.log("Received response from background:", response);
+
+        return true;
     }
+
+    //
+    // <FancyToggle onChange={handleChecked} name="isLightTheme" isChecked={!settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn}>
+    //     <ThemeToggle textOn="Светлая тема" textOff="Темная тема" />
+    // </FancyToggle>
 
     return (
         <div className="w-[500px] p-6 flex flex-col gap-6 rounded-5xl">
@@ -49,14 +60,11 @@ export default function Popup() {
             <FancyToggle onChange={handleChecked} name="isSoundOn" isChecked={settingsData.isSoundOn} isDisabled={!settingsData.isExtensionOn}>
                 <VolumeToggle textOn="Включить" textOff="Выключить" />
             </FancyToggle>
-            <FancyToggle onChange={handleChecked} name="isLightTheme" isChecked={settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn}>
-                <ThemeToggle textOn="Светлая тема" textOff="Темная тема" />
-            </FancyToggle>
             <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
             <label>
                 <input type="text" name="apiKey" placeholder={settingsData.apiKey ? settingsData.apiKey :"Введите ваш API ключ."} className='text-2xl text-center bg-[#E5E5E5] rounded-2xl w-full p-1 min-h-[64px]' onChange={handleChange} />
             </label>
-            <button disabled={!settingsData.isExtensionOn} onClick={handleSubmit} className="text-2xl text-center bg-[#E5E5E5] rounded-2xl w-[50%] p-1 min-h-[64px] self-center">💾 Сохранить</button>
+            <button type="submit" onClick={handleSubmit} className="transition text-2xl text-center text-white bg-black rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer hover:border-[#262626] hover:bg-[#262626] focus:bg-[#262626]/85 border-2 border-black">💾 Сохранить</button>
         </div>
     )
 }
