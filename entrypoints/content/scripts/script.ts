@@ -148,19 +148,29 @@ const hideAllQuestions = (questionsArray: HTMLElement[]) => {
 const getQuestionElements = (question: HTMLElement) => {
     var classList = question.classList;
     var questionType = classList[1];
-    var inputField: HTMLInputElement | HTMLTextAreaElement
-    inputField = question.querySelectorAll("input")[0] ? question.querySelectorAll("input")[0] : question.querySelectorAll("textarea")[0];
-    var questionId = inputField.id ? inputField.id : inputField.name;
-    var isRequired = question.querySelectorAll("[class*='Required']")[0] ? true : false;
+    // questionInputElement - элемент который есть в каждом вопросе, но может быть скрыт.
+    var questionInputElement: HTMLInputElement | HTMLTextAreaElement = question.querySelectorAll("input")[0] ? question.querySelectorAll("input")[0] : question.querySelectorAll("textarea")[0];
+    // inputField используется в логике как элемент на который ставится фокус
+    var inputField: HTMLInputElement | HTMLTextAreaElement | HTMLElement = questionInputElement
+    // inputField = question.querySelectorAll("input")[0] ? question.querySelectorAll("input")[0] : question.querySelectorAll("textarea")[0];    
+    // var questionId = inputField.id ? inputField.id : inputField.name;
 
+    var questionId = questionInputElement.id ? questionInputElement.id : questionInputElement.name;
+    var isRequired = question.querySelectorAll("[class*='Required']")[0] ? true : false;
 
     var questionLabel = question.getElementsByClassName("QuestionLabel")[0];
     var questionTextContent = question.textContent;
     // TO DO: 
     // Solve the problem with dropdown question having pseudo input field
-    // if (questionType == "DropdownQuestion") {
-    //     inputField = document.getElementById(questionId);
-    // }
+    var documentHTMLElemnt = document.getElementById(questionId)
+
+    if (questionType == "DropdownQuestion") {
+        if (documentHTMLElemnt) {
+            inputField = documentHTMLElemnt
+        } else {
+            console.log('У этого выпадающего списка нет элемента для фокуса.')
+        }
+    }
 
     return { 
         questionId,
@@ -319,42 +329,28 @@ const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElem
                 questionType: previousQuestionType
             } = getQuestionElements(previousQuestion)
             var previousQuestionNextButton = nextButtonsArray[questionIndex-1]
+
+            // PIN HERE
             
             previousQuestionInputField.addEventListener('keydown', function(event) {
                 if (event instanceof KeyboardEvent){
                     if (event.key === 'Enter') {
-                        if (previousQuestionInputField.validity.valid) {
-                            hideQuestion(previousQuestion);
-                            showQuestion(question);
-                        }
+                        hideShow(question, previousQuestion, previousQuestionInputField)
                     }
                 }
             });       
             previousQuestionNextButton.addEventListener('click', function() {
-                if (previousQuestionInputField.validity.valid) {
-                    hideQuestion(previousQuestion);
-                    showQuestion(question);
-                }
+                hideShow(question, previousQuestion, previousQuestionInputField)
             });
 
             if ((questionIndex + 1) === questionsArray.length) {
                 nextButton.addEventListener("click", function() {
-                    if (inputField.validity.valid) {
-                        hideQuestion(question);
-                        submitButton.style.display = "flex";
-                        submitButton.focus()
-                        sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
-                    }
+                    hideQuestShowSubmit(inputField, question, submitButton)
                 })
                 inputField.addEventListener('keydown', function(event) {
                     if (event instanceof KeyboardEvent) {
                         if (event.key === 'Enter') {
-                            if (inputField.validity.valid) {
-                                hideQuestion(question);
-                                submitButton.style.display = "flex";
-                                submitButton.focus()
-                                sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
-                            } 
+                            hideQuestShowSubmit(inputField, question, submitButton)
                         }
                     }
                 })
@@ -372,6 +368,62 @@ const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElem
         hideButton(submitButton);
         showQuestion(questionsArray[0]);
     })    
+}
+
+const hideQuestShowSubmit = (inputField: HTMLElement | HTMLInputElement | HTMLTextAreaElement, question: HTMLElement, submitButton: HTMLButtonElement) => {    
+    if (inputField instanceof HTMLInputElement || inputField instanceof HTMLTextAreaElement ) {
+        if (inputField.validity.valid) {
+        hideQuestion(question);
+        submitButton.style.display = "flex";
+        submitButton.focus()
+        sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
+        }
+    } else if (inputField instanceof HTMLElement) {
+        hideQuestion(question);
+        submitButton.style.display = "flex";
+        submitButton.focus()
+        sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
+    } else {
+        console.log('WARNING! This should never show up!')
+    }
+
+    // nextButton.addEventListener("click", function() {
+    //     if (inputField.validity.valid) {
+    //         hideQuestion(question);
+    //         submitButton.style.display = "flex";
+    //         submitButton.focus()
+    //         sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
+    //     }
+    // })
+}
+
+
+
+const hideShow = (question: HTMLElement, previousQuestion: HTMLElement, previousQuestionInputField: HTMLElement | HTMLInputElement | HTMLTextAreaElement) => {        
+    if (previousQuestionInputField instanceof HTMLInputElement || previousQuestionInputField instanceof HTMLTextAreaElement ) {
+        if (previousQuestionInputField.validity.valid) {
+            hideQuestion(previousQuestion);
+            showQuestion(question);
+        }
+    } else if (previousQuestionInputField instanceof HTMLElement) {
+        hideQuestion(previousQuestion);
+        showQuestion(question);
+    } else {
+        console.log('WARNING! This should never show up!')
+    }
+    // previousQuestionInputField.addEventListener('keydown', function(event) {
+    //     if (event instanceof KeyboardEvent){
+    //         if ((event.key === 'Enter') && previousQuestionInputField instanceof HTMLElement) {
+    //             hideQuestion(previousQuestion);
+    //             showQuestion(question);
+    //         } else if (event.key === 'Enter' && (previousQuestionInputField instanceof HTMLInputElement || previousQuestionInputField instanceof HTMLTextAreaElement )) {
+    //             if (previousQuestionInputField.validity.valid) {
+    //                 hideQuestion(previousQuestion);
+    //                 showQuestion(question);
+    //             }
+    //         }
+    //     }
+    // });       
 }
 
 const stylePage = () => {
