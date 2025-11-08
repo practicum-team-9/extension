@@ -1,12 +1,6 @@
 import "@/assets/tailwind.css";
 import { ReactNode } from "react";
 
-
-// TO DO: 
-// REPLACE EMOJIs WITH IMGs
-// Replace alerts with messaging to the shadow DOM
-
-
 interface fancyToggleProps {
     isDisabled?: boolean;
     isChecked: boolean;

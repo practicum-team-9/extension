@@ -9,16 +9,6 @@ import ThemeToggle from "../fancyToggle/themeToggle/themeToggle";
 
 export default function Popup() {
     const { settingsData, setSettingsData } = useSettingsData();
-
-
-    // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    //     if (request.action === "sayTheThing") {
-    //     console.log("Message received in popup from content script:", request.data);
-    //     if (settingsData.isSoundOn) {
-    //         sendResponse({isSoundOn: settingsData.isSoundOn})
-    //     }
-    //     }
-    // });
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

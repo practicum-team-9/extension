@@ -15,7 +15,22 @@ export default defineContentScript({
     console.log('Hello content.');
 
     window.onload = async () => {
-      console.log('WINDOWS LOADING!')
+      console.log('WINDOW IS LOADING!')
+      const ui = await createShadowUI(ctx, "message")
+      try {
+        chrome.storage.local.get(["settingsData"], async (result) => {
+          console.log('Getting data from storage')
+          if (result.settingsData.isExtensionOn) {
+            ui.mount()            
+          } else {
+            console.log('The extension is off!')
+          }
+        });
+      } catch (e) {
+        console.log('Error occured while trying to fetch data from storage.')
+        console.log('')
+        ui.mount()            
+      }
       chrome.storage.local.get(["settingsData"], async (result) => {
         console.log('Getting data from storage')
         if (result.settingsData.isExtensionOn) {
@@ -67,28 +82,3 @@ const createShadowUI = async (ctx: any, message: string) => {
       }
     });
 }
-
-
-// const createIUI = async (ctx: any, message: string) => {
-//   return createIntegratedUi(ctx, {
-//       position: "inline",
-//       anchor: "body",
-//       onMount: (uiContainer) => {
-//         const root = ReactDOM.createRoot(uiContainer);
-//         root.render(
-//           <React.StrictMode>
-//             <div className="visible absolute top-0 bottom-0 right-0 left-0 z-50 h-full w-full flex justify-center items-center bg-gray-900/50 ">
-//               <h1>YaForms Accessibility</h1>
-//               <h2>Hello World!</h2>
-//               <p>{message}</p>
-//             </div>
-//           </React.StrictMode>
-//         );
-//         return root;
-//       },
-//       onRemove(root) {
-//         console.log("Unmounting")
-//         root?.unmount();
-//       }
-//     });
-// }

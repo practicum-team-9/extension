@@ -56,16 +56,6 @@ export default defineBackground({
       return true;
     });
 
-      // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      //     console.log('Some message recieved')
-      //     if (request.action === "sayTheThing") {
-      //         console.log("Message received in the App from content script:", request.data);
-      //         if (true) {
-      //             sendResponse({isSoundOn: true})
-      //         }
-      //     }
-      // });
-
     });
   },
 });

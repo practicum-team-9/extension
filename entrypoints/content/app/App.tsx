@@ -6,45 +6,6 @@ import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettings
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
     const { settingsData } = useSettingsData();
-    // const [ settingsData, setSettingsData ] = useState({
-    //     isExtensionOn: true,
-    //     isSoundOn: true,
-    //     isLightTheme: true,
-    //     apiKey: ""
-    // });
-    // chrome.storage.local.get(["settingsData"], (result) => {
-    //     console.log('Loading state for App from storage')
-    //     if (result.settingsData) {
-    //         setSettingsData(result.settingsData)
-    //     }
-    // });
-    //browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      //  if (message.type === "SAYIT!") {
-      //      sendResponse("Acknowledged SAYIT!");
-      //      console.log("Received SAYIT!");
-      //      if (settingsData.isSoundOn) {
-      //          console.log('SAYING IT, because sound is on :', settingsData.isSoundOn)
-      //          console.log("PAYLOAD: \n", message.payload)
-      //          var utterance = new SpeechSynthesisUtterance(message.payload);
-      //          window.speechSynthesis.cancel()
-      //          window.speechSynthesis.speak(utterance);
-      //      } else {
-      //          console.log('NOT SAYING IT, because sound is on :', settingsData.isSoundOn)
-      //          window.speechSynthesis.cancel()
-      //      }
-      //  }
-
-      // if (message.type === "setSettingsData") {
-      //   sendResponse("Acknowledged setSettingsData!");
-      //   console.log("Received setSettingsData");
-      //   console.log(message.payload)
-      //   if (message.payload) {
-      //       setSettingsData(message.payload)
-      //   } 
-      // }
-      // Return true to indicate you want to send an asynchronous response
-        // return true;
-    //});
 
     const hideModal = () => {
         setIsModalVisible(false)
