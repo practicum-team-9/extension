@@ -12,11 +12,11 @@ interface iStartingScreenProps {
 
 export default function StartingScreen(props: iStartingScreenProps) {
     return (
-        <>
+        <div className="gap-4 flex flex-col w-full items-center">
             <h1 className="text-5xl">YaForms Accessibility</h1>
             <AccentButton text='Начать' onClick={props.startInDOM}/>
             <CommonButton text='Закрыть' onClick={props.startWithout}/>
             <AccentButton text='Начать в тени' onClick={props.startInShadowForm}/>
-        </>
+        </div>
     )
 }
