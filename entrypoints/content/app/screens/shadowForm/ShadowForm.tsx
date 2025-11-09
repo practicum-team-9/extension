@@ -15,8 +15,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         const maxPages = props.shadowFormData.pages.length
         console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
         console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
-    
-
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             console.log('Should be Impossible!')
@@ -33,6 +31,23 @@ export default function ShadowForm(props: iShadowFormProps) {
         }
     }
 
+    const previousQuestion = () => {
+        const maxPages = props.shadowFormData.pages.length
+        console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
+        console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
+
+        if (pageNumber == 0 && questionNumber == 0) {
+            console.log('Should be Impossible!')
+        } else if (questionNumber == 0) {
+            console.log('Moving to the previous page')
+            setPageNumber(pageNumber-1)
+            setQuestionNumber(0)
+        } else {
+            console.log('Previous Question!')
+            setQuestionNumber(questionNumber-1)
+        }
+    }
+
     return (
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl">{props.shadowFormData.name}</h1>
@@ -42,7 +57,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 <div className="flex flex-row justify-between">
                     <AccentButton onClick={nextQuestion} text={"Вперед"} />
                     <CommonButton onClick={() => {console.log('Click! PLAYING SMTHNG!')}} text={"Повторить"} />
-                    <CommonButton onClick={() => {console.log('Click! Previous!')}} text={"Назад"} />
+                    <CommonButton onClick={previousQuestion} text={"Назад"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
                     <div>Страница: {pageNumber+1}</div>
