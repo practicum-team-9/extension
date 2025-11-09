@@ -13,15 +13,22 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        if (pageNumber == maxPages && questionNumber == props.shadowFormData.pages[maxPages].items.length) {
+        console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
+        console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
+    
+
+
+        if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             console.log('Should be Impossible!')
             console.log(pageNumber, ' out of ', maxPages)
-        } else if (pageNumber == maxPages && questionNumber == props.shadowFormData.pages[maxPages].items.length-1) {
+        } else if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             console.log('It was the final questionCleaning Up!')
-        } else if (questionNumber == props.shadowFormData.pages[pageNumber].items.length) {
+        } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
+            console.log('Moving to the next page')
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
+            console.log('Next Question!')
             setQuestionNumber(questionNumber+1)
         }
     }
@@ -29,15 +36,16 @@ export default function ShadowForm(props: iShadowFormProps) {
     return (
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl">{props.shadowFormData.name}</h1>
+            <p className="text-4xl">ID формы: {props.shadowFormData.id}</p>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6">
-                <h2 className="text-4xl">ID формы: {props.shadowFormData.id}</h2>
+                <h2 className="text-4xl">{props.shadowFormData.pages[pageNumber].items[questionNumber].label}</h2>
                 <div className="flex flex-row justify-between">
                     <AccentButton onClick={nextQuestion} text={"Вперед"} />
                     <CommonButton onClick={() => {console.log('Click! PLAYING SMTHNG!')}} text={"Повторить"} />
                     <CommonButton onClick={() => {console.log('Click! Previous!')}} text={"Назад"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
-                    <div>Страница: {pageNumber}</div>
+                    <div>Страница: {pageNumber+1}</div>
                     <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber].items.length}</div>
                 </div>
             </div>
