@@ -1,62 +1,7 @@
-const sayTheThing = async (thing: string) => {
-    try {
-        chrome.storage.local.get(["settingsData"], async (result) => {
-            console.log('SOUND: Getting data from storage')
-            if (result.settingsData.isSoundOn) {
-                console.log(thing)
-                var utterance = new SpeechSynthesisUtterance(thing);
-                window.speechSynthesis.cancel()
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.log('The sound is off!')
-            }
-        });
-        return true;
-    } 
-    catch (e) {
-        console.log('Error occurred while trying to speak!')
-        console.log(e)
-    }
-
-    return true;
-}
-
-const styleBtnAccent = (btn: HTMLButtonElement) => {
-    if (btn) {
-        btn.classList="g-button g-button_view_action g-button_size_xl g-button_pin_round-round g-button_width_auto SurveyPage-Button";
-        btn.style.setProperty("--g-button-background-color", '#262626');
-        btn.style.setProperty("--g-button-background-color-hover", '#262626D9');
-        btn.style.setProperty("--_--height", '76px');
-        btn.style.width = '30%';
-        btn.style.setProperty("--_--font-size", '24px');
-        btn.style.setProperty("--_--padding", '16px');
-        btn.style.setProperty("--_--border-width", '2px');
-        btn.style.setProperty("--_--border-color", '#262626');
-        btn.style.setProperty("--_--focus-outline-color", '#262626');
-        btn.style.setProperty("--_--focus-outline-offset", '0px');
-        btn.style.color = "#ffffff";
-    } 
-
-    return btn;
-}
-
-const styleBtn = (btn: HTMLButtonElement) => {
-    if (btn) {
-        btn.classList="g-button g-button_view_action g-button_size_xl g-button_pin_round-round g-button_width_auto SurveyPage-Button";
-        btn.style.setProperty("--g-button-background-color", '#FFFFFF');
-        btn.style.setProperty("--g-button-background-color-hover", '#E5E5E5');
-        btn.style.width = '30%';
-        btn.style.setProperty("--_--height", '76px');
-        btn.style.setProperty("--_--font-size", '24px');
-        btn.style.setProperty("--_--padding", '16px');
-        btn.style.setProperty("--_--border-width", '2px');
-        btn.style.setProperty("--_--border-color", '#262626');
-        btn.style.setProperty("--_--focus-outline-color", '#262626');
-        btn.style.setProperty("--_--focus-outline-offset", '0px');
-        btn.style.color = "#262626";
-    } 
-    return btn;
-}
+import { createLogo } from "./logoScript/createLogo";
+import { makeTheSpeech } from "./speechScripts/makeTheSpeech";
+import { sayTheThing } from "./speechScripts/sayTheThing";
+import { styleBtn, styleBtnAccent, stylePage } from "./styleScript/styleScript";
 
 interface iCreateBtn {
     name: string,
@@ -111,20 +56,6 @@ const showQuestionButtons = (questionId: string) => {
     })
 }
 
-const hideQuestion = (question: HTMLElement) => {
-    var { 
-        questionId
-        } = getQuestionElements(question)
-    hideQuestionButtons(questionId);
-    question.style.display = "none";
-}
-
-const hideButton = (btn: HTMLButtonElement) => {
-    if (btn) {
-        btn.style.display = "none";
-    }
-}
-
 const hideQuestionButtons = (questionId: string) => {
     buttonTypes.forEach((type) => {
         var btn = document.getElementById(questionId + "-" + type)
@@ -137,6 +68,20 @@ const hideQuestionButtons = (questionId: string) => {
 
         };
     })
+}
+
+const hideQuestion = (question: HTMLElement) => {
+    var { 
+        questionId
+        } = getQuestionElements(question)
+    hideQuestionButtons(questionId);
+    question.style.display = "none";
+}
+
+const hideButton = (btn: HTMLButtonElement) => {
+    if (btn) {
+        btn.style.display = "none";
+    }
 }
 
 const hideAllQuestions = (questionsArray: HTMLElement[]) => {
@@ -180,70 +125,6 @@ const getQuestionElements = (question: HTMLElement) => {
         questionTextContent,
         isRequired
      }
-}
-
-const createLogo = () => {
-    var header = document.querySelectorAll("header")[0];
-    var logo = document.createElement('img');    logo.src = "data:image/png;base64,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";
-    logo.alt = "Логотип расширения";
-    logo.id = "extensionLogo";
-    var extensionHeader = document.createElement('span');
-    extensionHeader.textContent = 'YaForms accessibility';
-    var logoContainer = document.createElement('div');
-
-    logoContainer.style.display = "flex";
-    logoContainer.style.justifyContent = "center";
-    logoContainer.style.alignItems = "center";
-    logoContainer.style.gap = "10px";
-
-    logo.style.width = "32px";
-    logo.style.height = "32px";
-
-
-
-
-    header.appendChild(logoContainer);
-    logoContainer.appendChild(logo);
-    logoContainer.appendChild(extensionHeader);
-}
-
-interface iMakeTheSpeech {
-    isRequired: boolean,
-    questionType: string,
-    text: string,
-}
-
-const makeTheSpeech = (props: iMakeTheSpeech) => {
-    console.log(props.questionType)
-    props.text = props.text.replace("*", "");
-    props.text = props.text.replace("Обязательное поле", "");
-    var speech = "";
-    props.isRequired ? speech += "Это обязательный вопрос.\n " : speech += "Это необязательный вопрос.\n "
-    switch (props.questionType) {
-        case "TextQuestion":
-            speech += "Это вопрос со свободным ответом. Введите ответ с клавиатуры. Для подтверждения - нажмите Энтер\n "
-            break;
-        case "DateQuestion":
-            speech += "Это вопрос в формате даты. Введите дату с клавиатуры. Для подтверждения - нажмите Энтер \n ";
-            break;
-        case "BooleanQuestion":
-            speech += "Это закрытый вопрос. Нажмите пробел чтобы изменить значение. Для подтверждения - нажмите Энтер\n ";
-            break;
-        case "DropdownQuestion":
-            speech += "Это вопрос с выпадающим списком. Нажмите пробел чтобы выбрать список и выберите значения в нем и нажмите пробел. Для подтверждения - нажмите Энтер\n ";
-            break;
-        default: 
-            speech += " "
-    }
-
-    speech += " " + props.text;
-
-    return speech;
-}
-
-const goToTheNextQuestion = (previous: HTMLElement, next: HTMLElement) => {
-    hideQuestion(previous);
-    showQuestion(next);
 }
 
 const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElement>, surveyPageButtonsContainer: HTMLElement, submitButton: HTMLButtonElement) => {
@@ -386,15 +267,6 @@ const hideQuestShowSubmit = (inputField: HTMLElement | HTMLInputElement | HTMLTe
     } else {
         console.log('WARNING! This should never show up!')
     }
-
-    // nextButton.addEventListener("click", function() {
-    //     if (inputField.validity.valid) {
-    //         hideQuestion(question);
-    //         submitButton.style.display = "flex";
-    //         submitButton.focus()
-    //         sayTheThing('Вы заполнили форму. Для подтверждения нажмите пробел.')
-    //     }
-    // })
 }
 
 
@@ -410,37 +282,6 @@ const hideShow = (question: HTMLElement, previousQuestion: HTMLElement, previous
         showQuestion(question);
     } else {
         console.log('WARNING! This should never show up!')
-    }
-    // previousQuestionInputField.addEventListener('keydown', function(event) {
-    //     if (event instanceof KeyboardEvent){
-    //         if ((event.key === 'Enter') && previousQuestionInputField instanceof HTMLElement) {
-    //             hideQuestion(previousQuestion);
-    //             showQuestion(question);
-    //         } else if (event.key === 'Enter' && (previousQuestionInputField instanceof HTMLInputElement || previousQuestionInputField instanceof HTMLTextAreaElement )) {
-    //             if (previousQuestionInputField.validity.valid) {
-    //                 hideQuestion(previousQuestion);
-    //                 showQuestion(question);
-    //             }
-    //         }
-    //     }
-    // });       
-}
-
-const stylePage = () => {
-    var textInputsArray = Array.from(document.getElementsByClassName("TextQuestion-Input"));
-
-    if (textInputsArray) {
-        textInputsArray.forEach((textInput) => {
-            if (textInput instanceof HTMLElement){
-                // textInput.style["max-width"] = "100%";
-                textInput.style.maxWidth = "100%";
-                var inputField = textInput.querySelectorAll("input")[0];
-                if (inputField) {
-                    inputField.style.fontSize = "24px";
-                    inputField.style.height = "52px";
-                }
-            }
-        })
     }
 }
 
