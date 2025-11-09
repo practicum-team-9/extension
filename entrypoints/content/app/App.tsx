@@ -1,5 +1,5 @@
 import "@/assets/tailwind.css";
-import Modal from "../modal/Modal";
+import Modal from "./components/modal/Modal";
 import { newFormLoaded } from "../scripts/script";
 import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettingsData";
 import { getCurrentFormID } from "../scripts/utilityScripts/getCurrentFormID";

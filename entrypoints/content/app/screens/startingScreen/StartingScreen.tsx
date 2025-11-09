@@ -1,7 +1,7 @@
 import "@/assets/tailwind.css";
 import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
-import Modal from "@/entrypoints/content/modal/Modal";
+import Modal from "@/entrypoints/content/app/components/modal/Modal";
 
 interface iStartingScreenProps {
     isVisible: boolean,
