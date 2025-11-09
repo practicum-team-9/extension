@@ -5,7 +5,7 @@ import { newFormLoaded } from "./scripts/script";
 import App from "./app/App";
 
 export default defineContentScript({
-  matches: ['https://forms.yandex.ru/u/*'],
+  matches: ['https://forms.yandex.ru/u/*', 'https://forms.yandex.ru/cloud/*'],
   cssInjectionMode: "ui",
   allFrames: false,
   async main(ctx) {
