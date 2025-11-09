@@ -2,14 +2,21 @@ import "@/assets/tailwind.css";
 import { iShadowFormData } from "../../App";
 import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
+import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
 
 interface iShadowFormProps {
     shadowFormData: iShadowFormData
 }
 
+interface iSubmitAnswers {
+    [key: string] : string[],
+}
+
 export default function ShadowForm(props: iShadowFormProps) {
     const [ questionNumber, setQuestionNumber ] = useState(0)
     const [ pageNumber, setPageNumber ] = useState(0)
+    const [ isValid, setIsValid ] = useState(true)
+    const [ formState, setFormState ] = useState<iSubmitAnswers>()
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
@@ -51,13 +58,12 @@ export default function ShadowForm(props: iShadowFormProps) {
     return (
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl">{props.shadowFormData.name}</h1>
-            <p className="text-4xl">ID формы: {props.shadowFormData.id}</p>
-            <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6">
-                <h2 className="text-4xl">{props.shadowFormData.pages[pageNumber].items[questionNumber].label}</h2>
+            <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
+                <ShadowQuestion shadowQuestionData={props.shadowFormData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
-                    <AccentButton onClick={nextQuestion} text={"Вперед"} />
-                    <CommonButton onClick={() => {console.log('Click! PLAYING SMTHNG!')}} text={"Повторить"} />
                     <CommonButton onClick={previousQuestion} text={"Назад"} />
+                    <CommonButton onClick={() => {console.log('Click! PLAYING SMTHNG!')}} text={"Повторить"} />
+                    <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
                     <div>Страница: {pageNumber+1}</div>
