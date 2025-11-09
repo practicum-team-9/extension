@@ -3,6 +3,8 @@ import { iShadowFormData } from "../../App";
 import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
 import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
+import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
+import { useThingsToSay } from "@/entrypoints/hooks/useSettingsData/useThingsToSay";
 
 interface iShadowFormProps {
     shadowFormData: iShadowFormData
@@ -17,6 +19,7 @@ export default function ShadowForm(props: iShadowFormProps) {
     const [ pageNumber, setPageNumber ] = useState(0)
     const [ isValid, setIsValid ] = useState(true)
     const [ formState, setFormState ] = useState<iSubmitAnswers>()
+    // const { thingsToSay } = useThingsToSay();
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
@@ -62,7 +65,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 <ShadowQuestion shadowQuestionData={props.shadowFormData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
                     <CommonButton onClick={previousQuestion} text={"Назад"} />
-                    <CommonButton onClick={() => {console.log('Click! PLAYING SMTHNG!')}} text={"Повторить"} />
+                    <CommonButton onClick={() => sayTheThing('Thing')} text={"Повторить"} />
                     <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
