@@ -5,6 +5,8 @@ import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettings
 import { getCurrentFormID } from "../scripts/utilityScripts/getCurrentFormID";
 import Loader from "./components/loader/Loader";
 import StartingScreen from "./screens/startingScreen/StartingScreen";
+import ShadowForm from "./screens/shadowForm/ShadowForm";
+import FinalScreen from "./screens/finalScreen/FinalScreen";
 
 
 export interface iShadowFormPageItemsData {
@@ -27,7 +29,7 @@ export interface iShadowFormData {
     iFrame: boolean,
     name: string,
     pages: iShadowFormPagesData[],
-    teaser: true,
+    teaser: boolean,
     texts?: {
         submit?: string,
         back?: string,
@@ -35,12 +37,31 @@ export interface iShadowFormData {
     }
 }
 
+interface iElementsVisibility {
+    startingScreen: boolean,
+    shadowForm: boolean,
+    finalScreen: boolean
+}
+
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
     const { settingsData } = useSettingsData();
-    const [formData, setFormData] = useState<iShadowFormData>(); // Or null, or an empty object, depending on your data structure
+    const [formData, setFormData] = useState<iShadowFormData>({
+        footer: true,
+        id: 'Загружаем...',
+        iFrame: false,
+        name: 'Загружаем',
+        pages: [],
+        teaser: true,
+    }); // Or null, or an empty object, depending on your data structure
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [ elementsVisibility, setElementsVisibility ] = useState<iElementsVisibility>({
+        startingScreen: false,
+        shadowForm: false,
+        finalScreen: false
+    })
 
     const hideModal = () => {
         setIsModalVisible(false)
@@ -69,6 +90,11 @@ export default function App() {
                 console.log(error);
             } finally {
                 setLoading(false);
+                setElementsVisibility({
+                    startingScreen: true,
+                    shadowForm: false,
+                    finalScreen: false
+                })
             }
         };
 
@@ -78,13 +104,35 @@ export default function App() {
 
     return (
         <div>
-            <Modal isVisible={isModalVisible}>{
-                loading ? 
-                <Loader />
-                :
-                <StartingScreen startInDOM={startInDOM} startWithout={hideModal} startInShadowForm={()=> {console.log(formData)}} />
-                }
-            </Modal>
+            <Modal isVisible={isModalVisible}>
+                <>{loading ? <Loader /> : <></>}</>
+                <>
+                    {elementsVisibility.startingScreen ? 
+                    <StartingScreen 
+                    isVisible={elementsVisibility.startingScreen} 
+                    startInDOM={startInDOM} 
+                    startWithout={hideModal} 
+                    startInShadowForm={() => setElementsVisibility(
+                        {
+                            startingScreen: false,
+                            shadowForm: true,
+                            finalScreen: false
+                        }
+                    )
+                    } /> : 
+                    <></> }
+                </>
+                <>
+                    {elementsVisibility.shadowForm ? 
+                    <ShadowForm shadowFormData={formData} /> : 
+                    <></> }
+                </>
+                <>
+                    {elementsVisibility.finalScreen ? 
+                    <FinalScreen /> : 
+                    <></> }
+                </>
+            </ Modal>
         </div>
 )
     
