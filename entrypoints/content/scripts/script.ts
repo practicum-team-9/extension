@@ -165,11 +165,20 @@ const addControls = (surveyForm: HTMLFormElement, questions: NodeListOf<HTMLElem
             } = getQuestionElements(question)
 
         inputField.style.fontSize = "24px";
-        if (questionType == "DropdownQuestion") {
-             inputField.addEventListener("click", () => {
-                sayTheThing("Выбранный вариант " + inputField.textContent)
-             })
-        }
+        // if (questionType == "DropdownQuestion") {
+        //      inputField.addEventListener("click", (e) => {
+        //         setTimeout(() => {
+        //             var options = document.getElementsByClassName('DropdownQuestion-Option')
+        //             for (let option of options) {
+        //                 // console.log(option.textContent)
+        //                 option.addEventListener('click', () => {
+        //                     console.log(option.textContent)
+        //                 })
+        //             }
+        //             // console.log(options)
+        //         }, 0)
+        //      })
+        // }
         var textProps = {
             isRequired,
             questionType,
