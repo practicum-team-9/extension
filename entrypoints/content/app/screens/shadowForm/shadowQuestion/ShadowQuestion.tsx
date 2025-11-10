@@ -14,7 +14,14 @@ interface iShadowQuestionProps {
 
 export default function ShadowQuestion(props: iShadowQuestionProps) {
     const { hidden, id, label, multiline, type, widget, validations, validationArray, questionType, speech, items } = props.shadowQuestionData
+    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null) 
 
+    useEffect(() => {
+        console.log('Locking in... ')
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [props.shadowQuestionData])
 
     if (questionType === 'date') {
         return (
@@ -26,7 +33,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <input onChange={props.onChange} name={id} id={id} type='date' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2"/>
+                <input onChange={props.onChange} name={id} id={id} type='date' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}/>
             </>
         )
     } else if (questionType === 'dropdown') {
@@ -39,7 +46,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <select onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2">
+                <select onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}>
                     <option selected disabled value='Не выбрано'>Выберите значение!</option>
                     {
                         items?.map((item, index) => (
@@ -52,7 +59,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
     } else if (questionType === 'checkbox') {
         return (
             <div className="flex flex-row w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2">
-                <input onChange={props.onChange} name={id} id={id} type='checkbox' required={validationArray.includes('required')} className="flex flex-row w-12 h-12 rounded-md pt-4 pb-4 pl-2 pr-2"/>
+                <input onChange={props.onChange} name={id} id={id} type='checkbox' required={validationArray.includes('required')} className="flex flex-row w-12 h-12 rounded-md pt-4 pb-4 pl-2 pr-2" ref={inputRef}/>
                 <div className="flex flex-row ">                    
                     {props.shadowQuestionData.validationArray.includes('required') ? 
                     <div className="text-red-600 text-2xl">
@@ -72,7 +79,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <input onChange={props.onChange} name={id} id={id} type='email' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
+                <input onChange={props.onChange} name={id} id={id} type='email' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
             </>
         )
     } else if (questionType === 'tel') {
@@ -85,7 +92,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <input onChange={props.onChange} name={id} id={id} type='tel' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
+                <input onChange={props.onChange} name={id} id={id} type='tel' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
             </>
         )          
     } else if (type === 'string' && multiline) {
@@ -98,7 +105,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <textarea onChange={props.onChange} name={id} id={id} rows={6} required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
+                <textarea onChange={props.onChange} name={id} id={id} rows={6} required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
             </>
         )
     } else if (type === 'string') {
@@ -111,7 +118,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <input onChange={props.onChange} name={id} id={id} type='text' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
+                <input onChange={props.onChange} name={id} id={id} type='text' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}/>
             </>
         )
     }    
