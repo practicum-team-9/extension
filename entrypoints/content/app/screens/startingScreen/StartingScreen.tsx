@@ -15,7 +15,7 @@ export default function StartingScreen(props: iStartingScreenProps) {
         <div className="gap-4 flex flex-col w-full items-center">
             <h1 className="text-5xl">YaForms Accessibility</h1>
             <MenuBtn>
-                <AccentButton text='Начать' onClick={props.startInShadowForm}/>
+                <AccentButton text='Начать' onClick={props.startInShadowForm} />
             </MenuBtn>
             <MenuBtn>
                 <CommonButton text='Закрыть' onClick={props.startWithout}/>

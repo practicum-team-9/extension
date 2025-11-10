@@ -14,12 +14,18 @@ interface iShadowQuestionProps {
 
 export default function ShadowQuestion(props: iShadowQuestionProps) {
     const { hidden, id, label, multiline, type, widget, validations, validationArray, questionType, speech, items } = props.shadowQuestionData
-    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null) 
+    const inputRef = useRef<HTMLInputElement>(null) 
+    const textRef = useRef<HTMLTextAreaElement>(null) 
+    const selectRef = useRef<HTMLSelectElement>(null) 
 
     useEffect(() => {
         //console.log('Locking in... ')
         if (inputRef.current) {
             inputRef.current.focus();
+        } else if (textRef.current) {
+            textRef.current.focus();
+        } else if (selectRef.current) {
+            selectRef.current.focus();
         }
     }, [props.shadowQuestionData])
 
@@ -46,7 +52,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <select onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}>
+                <select onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={selectRef}>
                     <option selected disabled value='Не выбрано'>Выберите значение!</option>
                     {
                         items?.map((item, index) => (
@@ -105,7 +111,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <textarea onChange={props.onChange} name={id} id={id} rows={6} required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
+                <textarea onChange={props.onChange} name={id} id={id} rows={6} required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={textRef} />
             </>
         )
     } else if (type === 'string') {
