@@ -113,6 +113,10 @@ export default function ShadowForm(props: iShadowFormProps) {
         }
     }
 
+    const repeatItPlease = () => {
+        sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
+    }
+
     useEffect(() => {
         const { pages } = props.shadowFormData
         var itemsArray: iShadowFormPageItemsFormatted[]
@@ -179,7 +183,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 <ShadowQuestion shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
                     <CommonButton onClick={previousQuestion} text={"Назад"} />
-                    <CommonButton onClick={() => sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)} text={"Повторить"} />
+                    <CommonButton onClick={} text={"Повторить"} />
                     <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
