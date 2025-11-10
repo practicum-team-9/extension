@@ -1,28 +1,165 @@
 import "@/assets/tailwind.css";
-import Modal from "../modal/Modal";
+import Modal from "./components/modal/Modal";
 import { newFormLoaded } from "../scripts/script";
 import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettingsData";
+import { getCurrentFormID } from "../scripts/utilityScripts/getCurrentFormID";
+import Loader from "./components/loader/Loader";
+import StartingScreen from "./screens/startingScreen/StartingScreen";
+import ShadowForm from "./screens/shadowForm/ShadowForm";
+import FinalScreen from "./screens/finalScreen/FinalScreen";
+
+export interface iShadowFormDropDownItemsData {
+    id: string,
+    label: string,
+}
+
+export interface iShadowFormPageItemsData {
+    hidden: boolean,
+    id: string,
+    label: string,
+    multiline: boolean,
+    type: string,
+    items?: iShadowFormDropDownItemsData[],
+    widget?: boolean,
+    validations?: {type: string}[]
+}
+
+export interface iShadowFormPagesData {
+    items: iShadowFormPageItemsData[]
+}
+
+export interface iShadowFormData {
+    footer: boolean,
+    id: string,
+    iFrame: boolean,
+    name: string,
+    pages: iShadowFormPagesData[],
+    teaser: boolean,
+    texts?: {
+        submit?: string,
+        back?: string,
+        next?: string
+    }
+}
+
+interface iElementsVisibility {
+    startingScreen: boolean,
+    shadowForm: boolean,
+    finalScreen: boolean
+}
 
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
     const { settingsData } = useSettingsData();
+    const [formData, setFormData] = useState<iShadowFormData>({
+        footer: true,
+        id: 'Загружаем...',
+        iFrame: false,
+        name: 'Загружаем',
+        pages: [],
+        teaser: true,
+    }); // Or null, or an empty object, depending on your data structure
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [ elementsVisibility, setElementsVisibility ] = useState<iElementsVisibility>({
+        startingScreen: false,
+        shadowForm: false,
+        finalScreen: false
+    })
 
     const hideModal = () => {
         setIsModalVisible(false)
     }
+
+    const startInDOM = () => {
+        hideModal();
+        newFormLoaded();
+    }
+
+    const startInShadowForm = () => {
+        setElementsVisibility(
+            {
+                startingScreen: false,
+                shadowForm: true,
+                finalScreen: false
+            }
+        )
+    }
+    
+    
+    const showTheStartingScreen = () => {
+        setElementsVisibility(
+            {
+                startingScreen: true,
+                shadowForm: false,
+                finalScreen: false
+            }
+        )}
+
+    const showTheFinalScreen = () => {
+        setElementsVisibility(
+            {
+                startingScreen: false,
+                shadowForm: false,
+                finalScreen: true
+            }
+        )}
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const id = getCurrentFormID()
+                const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
+                // console.log(id)
+                // console.log(fetchUrl)
+                const response = await fetch(fetchUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                setFormData(result);
+                // console.log(result)
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+                setElementsVisibility({
+                    startingScreen: true,
+                    shadowForm: false,
+                    finalScreen: false
+                })
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
     return (
         <div>
             <Modal isVisible={isModalVisible}>
-                <h1 className="text-5xl">YaForms Accessibility</h1>
-                <button onClick={() => {
-                console.log('Button clicked!');
-                hideModal();
-                newFormLoaded();
-                }} className="text-3xl bg-black text-white pt-2 pb-2 pl-4 pr-4 text-center justify-center border border-black rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer hover:border-[#262626] hover:bg-[#262626] focus:bg-[#262626]/85">Начать</button>
-                <button onClick={hideModal} type="button" className="text-3xl bg-white text-black pt-2 pb-2 pl-4 pr-4 text-center justify-center rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer border border-black">
-                Закрыть
-                </button>
-            </Modal>
+                <>{loading ? <Loader /> : <></>}</>
+                <>
+                    {elementsVisibility.startingScreen ? 
+                    <StartingScreen 
+                    isVisible={elementsVisibility.startingScreen} 
+                    startInDOM={startInDOM} 
+                    startWithout={hideModal} 
+                    startInShadowForm={startInShadowForm} /> : 
+                    <></> }
+                </>
+                <>
+                    {elementsVisibility.shadowForm ? 
+                    <ShadowForm shadowFormData={formData} previousScreen={showTheStartingScreen} nextScreen={showTheFinalScreen} /> : 
+                    <></> }
+                </>
+                <>
+                    {elementsVisibility.finalScreen ? 
+                    <FinalScreen formName={formData.name} doItAgain={showTheStartingScreen} /> : 
+                    <></> }
+                </>
+            </ Modal>
         </div>
 )
     

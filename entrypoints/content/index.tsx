@@ -12,20 +12,20 @@ export default defineContentScript({
     if (ctx.isInvalid) {
       console.log('WARNING! Something is wrong with the context!')
     }
-    console.log('Hello content.');
+    // console.log('Hello content.');
 
     window.onload = async () => {
-      console.log('WINDOW IS LOADING!')
+      // console.log('WINDOW IS LOADING!')
       const ui = await createShadowUI(ctx, "message")
       try {
         chrome.storage.local.get(["settingsData"], async (result) => {
-          console.log('Getting data from storage')
-          console.log(result)
-          console.log(result.settingsData)
+          // console.log('Getting data from storage')
+          // console.log(result)
+          // console.log(result.settingsData)
           const isLightThemeOn = window.matchMedia("(prefers-color-scheme: light)").matches;
-          console.log('Current theme is light :', isLightThemeOn)
+          // console.log('Current theme is light :', isLightThemeOn)
           if (!result.settingsData) {
-            console.log('Settings data does not exist yet!\nCREATING!')
+            //console.log('Settings data does not exist yet!\nCREATING!')
             chrome.storage.local.set({"settingsData": {
               isExtensionOn: true,
               isSoundOn: true,
@@ -50,10 +50,10 @@ export default defineContentScript({
 
     chrome.runtime.onMessage.addListener(
       async (message, sender, sendResponse) => {
-        console.log("Recieved action in content script", message)
+        // console.log("Recieved action in content script", message)
         switch (message.action) {
           case "newForm":
-            console.log("NewForm action recieved")
+            // console.log("NewForm action recieved")
             sendResponse({ status: "New Form action handled"})
             newFormLoaded()
             break;
@@ -67,7 +67,7 @@ export default defineContentScript({
 
 
 const createShadowUI = async (ctx: any, message: string) => {
-  console.log('creating shadow Ui')
+  // console.log('creating shadow Ui')
   return createShadowRootUi(ctx, {
       name: "make-access",
       position: "inline",
@@ -83,7 +83,7 @@ const createShadowUI = async (ctx: any, message: string) => {
         return root;
       },
       onRemove(root) {
-        console.log("Unmounting")
+        // console.log("Unmounting")
         root?.unmount();
       }
     });
