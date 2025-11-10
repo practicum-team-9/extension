@@ -111,15 +111,15 @@ export default function App() {
             try {
                 const id = getCurrentFormID()
                 const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
-                console.log(id)
-                console.log(fetchUrl)
+                // console.log(id)
+                // console.log(fetchUrl)
                 const response = await fetch(fetchUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json();
                 setFormData(result);
-                console.log(result)
+                // console.log(result)
             } catch (error) {
                 console.log(error);
             } finally {

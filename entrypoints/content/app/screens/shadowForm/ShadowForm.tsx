@@ -82,13 +82,13 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
+        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
+        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
         } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
-            console.log('Moving to the next page')
+            // console.log('Moving to the next page')
             if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
@@ -99,7 +99,7 @@ export default function ShadowForm(props: iShadowFormProps) {
             if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            console.log('Next Question!')
+            // console.log('Next Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
             // sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
@@ -108,19 +108,19 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const previousQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
+        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
+        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            console.log('Moving to the previous page')
+            //console.log('Moving to the previous page')
             sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            console.log('Previous Question!')
+            //console.log('Previous Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
@@ -156,7 +156,6 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const submitFormAnsers = () => {
         console.log('Submitting!...')
-        console.log()
         console.log(formState)
 
         const id = getCurrentFormID()
@@ -170,7 +169,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            // console.log(data)
             props.nextScreen()
         })
         .catch(error => console.error('Error:', error));
@@ -245,9 +244,8 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     useEffect(() => {
         const keyboardPressed = (event: KeyboardEvent) => {
-            console.log('Key pressed: ', event.key)
             if (event.key === 'Enter' && isValid) {
-                console.log(formattedData)
+                //console.log(formattedData)
                 nextQuestion()
             }
         }

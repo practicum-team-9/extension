@@ -1,15 +1,16 @@
 export const sayTheThing = async (thing: string) => {
     try {
         chrome.storage.local.get(["settingsData"], async (result) => {
-            console.log('SOUND: Getting data from storage')
+            // console.log('SOUND: Getting data from storage')
             if (result.settingsData.isSoundOn) {
-                console.log(thing)
+                // console.log(thing)
                 var utterance = new SpeechSynthesisUtterance(thing);
                 window.speechSynthesis.cancel()
                 window.speechSynthesis.speak(utterance)
-            } else {
-                console.log('The sound is off!')
-            }
+            } 
+            // else {
+            //     console.log('The sound is off!')
+            // }
         });
         return true;
     } 

@@ -17,14 +17,9 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
     const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null) 
 
     useEffect(() => {
-        console.log('Locking in... ')
+        //console.log('Locking in... ')
         if (inputRef.current) {
             inputRef.current.focus();
-            inputRef.current.addEventListener('keydown', function(event) {
-                if (event.key === 'enter') {
-                    console.log('Enter!')
-                }
-            })
         }
     }, [props.shadowQuestionData])
 
