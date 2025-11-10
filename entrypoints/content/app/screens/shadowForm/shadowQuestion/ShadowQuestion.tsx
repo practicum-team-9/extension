@@ -27,7 +27,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
             <div>
                 <label htmlFor={id} className="text-3xl">{label}</label>
                 <select onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2">
-                    <option disabled selected value='Не выбрано'>Выберите вариант</option>
+                    <option selected disabled value='Не выбрано'>Выберите значение!</option>
                     {
                         items?.map((item, index) => (
                         <option key={index} id={item.id} value={item.label}>{item.label}</option>
@@ -36,12 +36,6 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                 </select>
             </div>
         )
-        // return (
-        //     <>
-        //         <h2 className="text-3xl">{label}</h2>
-        //         <input name={id} id={id} type='dropdown' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] p-2"/>
-        //     </>
-        // )
     } else if (questionType === 'checkbox') {
         return (
             <div className="flex flex-row w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2">
@@ -49,24 +43,21 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                 <label htmlFor={id} className="text-2xl">{label}</label>
             </div>
         )
-    } 
-    else if (questionType === 'email') {
+    } else if (questionType === 'email') {
         return (
             <>
                 <label htmlFor={id} className="text-3xl">{label}</label>
                 <input onChange={props.onChange} name={id} id={id} type='email' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
             </>
         )
-    } 
-    else if (questionType === 'tel') {
+    } else if (questionType === 'tel') {
         return (
             <>
                 <label htmlFor={id} className="text-3xl">{label}</label>
                 <input onChange={props.onChange} name={id} id={id} type='tel' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" />
             </>
         )          
-    } 
-    else if (type === 'string' && multiline) {
+    } else if (type === 'string' && multiline) {
         return (
             <>
                 <label htmlFor={id} className="text-3xl">{label}</label>

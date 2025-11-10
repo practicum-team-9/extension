@@ -77,6 +77,35 @@ export default function App() {
         newFormLoaded();
     }
 
+    const startInShadowForm = () => {
+        setElementsVisibility(
+            {
+                startingScreen: false,
+                shadowForm: true,
+                finalScreen: false
+            }
+        )
+    }
+    
+    
+    const showTheStartingScreen = () => {
+        setElementsVisibility(
+            {
+                startingScreen: true,
+                shadowForm: false,
+                finalScreen: false
+            }
+        )}
+
+    const showTheFinalScreen = () => {
+        setElementsVisibility(
+            {
+                startingScreen: false,
+                shadowForm: false,
+                finalScreen: true
+            }
+        )}
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -117,19 +146,12 @@ export default function App() {
                     isVisible={elementsVisibility.startingScreen} 
                     startInDOM={startInDOM} 
                     startWithout={hideModal} 
-                    startInShadowForm={() => setElementsVisibility(
-                        {
-                            startingScreen: false,
-                            shadowForm: true,
-                            finalScreen: false
-                        }
-                    )
-                    } /> : 
+                    startInShadowForm={startInShadowForm} /> : 
                     <></> }
                 </>
                 <>
                     {elementsVisibility.shadowForm ? 
-                    <ShadowForm shadowFormData={formData} /> : 
+                    <ShadowForm shadowFormData={formData} previousScreen={showTheStartingScreen} nextScreen={showTheFinalScreen} /> : 
                     <></> }
                 </>
                 <>

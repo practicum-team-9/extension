@@ -8,6 +8,8 @@ import { useThingsToSay } from "@/entrypoints/hooks/useSettingsData/useThingsToS
 import { HTMLInputTypeAttribute } from "react";
 
 interface iShadowFormProps {
+    previousScreen: () => void;
+    nextScreen: () => void;
     shadowFormData: iShadowFormData
 }
 
@@ -53,6 +55,7 @@ export interface iShadowFormFormatted {
 export default function ShadowForm(props: iShadowFormProps) {
     const [ questionNumber, setQuestionNumber ] = useState(0)
     const [ pageNumber, setPageNumber ] = useState(0)
+    const [ isFinalPage, setIsFinalPage ] = useState(false)
     const [ isValid, setIsValid ] = useState(true)
     const [ formState, setFormState ] = useState<iSubmitAnswers>({})
     const [ formattedData, setFormattedData ] = useState<iShadowFormFormatted>({
@@ -83,16 +86,21 @@ export default function ShadowForm(props: iShadowFormProps) {
         console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
-            console.log('Should be Impossible!')
-            console.log(pageNumber, ' out of ', maxPages)
-        } else if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
-            console.log('It was the final questionCleaning Up!')
+            submitFormAnsers()
+            // console.log('Should be Impossible!')
+            // console.log(pageNumber, ' out of ', maxPages)
         } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
             console.log('Moving to the next page')
+            if (formattedData.pages[pageNumber+1].items[0].validationArray.includes('required')) {
+                setIsValid(false)
+            }
             sayTheThing(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
+            if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray.includes('required')) {
+                setIsValid(false)
+            }
             console.log('Next Question!')
             sayTheThing(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
@@ -106,7 +114,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber == 0 && questionNumber == 0) {
-            console.log('Should be Impossible!')
+            props.previousScreen()
         } else if (questionNumber == 0) {
             console.log('Moving to the previous page')
             sayTheThing(formattedData.pages[pageNumber-1].items[0].speech)
@@ -123,12 +131,22 @@ export default function ShadowForm(props: iShadowFormProps) {
         sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
-        console.log('Change!\n Name: ', name , ' Value: ' , value)
-        console.log(formState)
+        // console.log('Change!\n Name: ', name , ' Value: ' , value)
+        // console.log(formState)
+        setIsValid(e.target.checkValidity())
+        setTimeout(() => {
+            sayTheThing(`Вы ввели ${value}`)
+        }, 1000)
     };
+
+    const submitFormAnsers = () => {
+        console.log('Submitting!...')
+        console.log()
+        console.log(formState)
+    }
 
     useEffect(() => {
         const { pages } = props.shadowFormData
@@ -190,6 +208,8 @@ export default function ShadowForm(props: iShadowFormProps) {
             ...props.shadowFormData,
             pages: pagesArray
         })
+        setIsValid(false)
+        
     }, [props.shadowFormData])
 
     return (
