@@ -6,6 +6,7 @@ import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
 import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
 import { HTMLInputTypeAttribute } from "react";
 import { getCurrentFormID } from "@/entrypoints/content/scripts/utilityScripts/getCurrentFormID";
+import CommonBtn from "../../components/buttons/btnContainers/CommonBtn";
 
 interface iShadowFormProps {
     previousScreen: () => void;
@@ -246,9 +247,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
                 <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
-                    <CommonButton onClick={previousQuestion} text={"Назад"} />
-                    <CommonButton onClick={repeatItPlease} text={"Повторить"} />
-                    <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
+                    <CommonBtn isAccent={false}>
+                        <CommonButton onClick={previousQuestion} text={"Назад"} />
+                    </CommonBtn><CommonBtn isAccent={false}>
+                        <CommonButton onClick={repeatItPlease} text={"Повторить"} />
+                    </CommonBtn>
+                    <CommonBtn isAccent={true}>
+                        <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
+                    </CommonBtn>
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
                     <div>Страница: {pageNumber+1}</div>

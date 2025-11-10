@@ -156,7 +156,7 @@ export default function App() {
                 </>
                 <>
                     {elementsVisibility.finalScreen ? 
-                    <FinalScreen /> : 
+                    <FinalScreen formName={formData.name} doItAgain={showTheStartingScreen} /> : 
                     <></> }
                 </>
             </ Modal>
