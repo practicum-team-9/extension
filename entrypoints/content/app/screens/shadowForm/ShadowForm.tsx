@@ -4,7 +4,6 @@ import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
 import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
 import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
-import { useThingsToSay } from "@/entrypoints/hooks/useSettingsData/useThingsToSay";
 import { HTMLInputTypeAttribute } from "react";
 import { getCurrentFormID } from "@/entrypoints/content/scripts/utilityScripts/getCurrentFormID";
 
@@ -118,10 +117,12 @@ export default function ShadowForm(props: iShadowFormProps) {
             sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
+            setIsValid(true)
         } else {
             console.log('Previous Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
+            setIsValid(true)
         }
     }
 
