@@ -56,7 +56,6 @@ export interface iShadowFormFormatted {
 export default function ShadowForm(props: iShadowFormProps) {
     const [ questionNumber, setQuestionNumber ] = useState(0)
     const [ pageNumber, setPageNumber ] = useState(0)
-    const [ isFinalPage, setIsFinalPage ] = useState(false)
     const [ isValid, setIsValid ] = useState(true)
     const [ formState, setFormState ] = useState<iSubmitAnswers>({})
     const [ formattedData, setFormattedData ] = useState<iShadowFormFormatted>({
@@ -88,14 +87,12 @@ export default function ShadowForm(props: iShadowFormProps) {
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
-            // console.log('Should be Impossible!')
-            // console.log(pageNumber, ' out of ', maxPages)
         } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
             console.log('Moving to the next page')
             if (formattedData.pages[pageNumber+1].items[0].validationArray.includes('required')) {
                 setIsValid(false)
             }
-            sayTheThing(formattedData.pages[pageNumber+1].items[0].speech)
+            sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
@@ -103,7 +100,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 setIsValid(false)
             }
             console.log('Next Question!')
-            sayTheThing(formattedData.pages[pageNumber].items[questionNumber+1].speech)
+            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
             // sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
         }
@@ -118,18 +115,22 @@ export default function ShadowForm(props: iShadowFormProps) {
             props.previousScreen()
         } else if (questionNumber == 0) {
             console.log('Moving to the previous page')
-            sayTheThing(formattedData.pages[pageNumber-1].items[0].speech)
+            sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
         } else {
             console.log('Previous Question!')
-            sayTheThing(formattedData.pages[pageNumber].items[questionNumber-1].speech)
+            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
         }
     }
 
     const repeatItPlease = () => {
-        sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
+        sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+    }
+
+    const sayTheThingWrapper = (thing: string) => {
+        sayTheThing(thing)
     }
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -147,7 +148,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         // console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
-            sayTheThing(`Вы ввели ${value}`)
+            sayTheThingWrapper(`Вы ввели ${value}`)
         }, 1000)
     };
 
@@ -240,7 +241,7 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     return (
         <div className="flex flex-col items-center ">
-            <h1 className="text-5xl">{props.shadowFormData.name}</h1>
+            <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
                 <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">

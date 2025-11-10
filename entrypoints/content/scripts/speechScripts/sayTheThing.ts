@@ -6,7 +6,7 @@ export const sayTheThing = async (thing: string) => {
                 console.log(thing)
                 var utterance = new SpeechSynthesisUtterance(thing);
                 window.speechSynthesis.cancel()
-                window.speechSynthesis.speak(utterance);
+                window.speechSynthesis.speak(utterance)
             } else {
                 console.log('The sound is off!')
             }
