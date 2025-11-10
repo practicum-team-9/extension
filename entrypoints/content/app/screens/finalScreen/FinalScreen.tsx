@@ -12,12 +12,14 @@ interface iFinalScreenProps {
 
 export default function FinalScreen(props: iFinalScreenProps) {
     return (
-        <div className="flex flex-col items-center ">
+        <div className="gap-4 flex flex-col w-full items-center">
             <h1 className="text-5xl text-center mb-6">{props.formName}</h1>
-            <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <h2 className="text-3xl">Спасибо!</h2>
-                <div>Ваш ответ записан</div>
-                <div className="flex flex-row justify-around">
+            <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between items-center">
+                <div>
+                    <h2 className="text-4xl">Спасибо!</h2>
+                    <div className="text-gray-400 text-2xl ">Ваш ответ записан</div>
+                </div>
+                <div className="flex flex-row justify-around gap-10 ">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={() => props.doItAgain()} text={"На главную! "} />
                     </CommonBtn>
