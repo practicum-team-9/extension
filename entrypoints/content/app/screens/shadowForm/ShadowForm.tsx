@@ -89,14 +89,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             submitFormAnsers()
         } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
             console.log('Moving to the next page')
-            if (formattedData.pages[pageNumber+1].items[0].validationArray.includes('required')) {
+            if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
             sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
-            if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray.includes('required')) {
+            if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
             console.log('Next Question!')
@@ -240,6 +240,23 @@ export default function ShadowForm(props: iShadowFormProps) {
         setIsValid(false)
         
     }, [props.shadowFormData])
+
+
+
+    useEffect(() => {
+        const keyboardPressed = (event: KeyboardEvent) => {
+            console.log('Key pressed: ', event.key)
+            if (event.key === 'Enter' && isValid) {
+                console.log(formattedData)
+                nextQuestion()
+            }
+        }
+        document.addEventListener('keydown', keyboardPressed)
+
+        return () => {
+            document.removeEventListener('keydown', keyboardPressed)
+        }
+    }, [formattedData, isValid, pageNumber, questionNumber])
 
     return (
         <div className="flex flex-col items-center ">
