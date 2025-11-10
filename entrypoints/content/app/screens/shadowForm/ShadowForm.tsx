@@ -88,11 +88,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             console.log('It was the final questionCleaning Up!')
         } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
             console.log('Moving to the next page')
+            sayTheThing(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
             console.log('Next Question!')
+            sayTheThing(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
+            // sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
         }
     }
 
@@ -105,10 +108,12 @@ export default function ShadowForm(props: iShadowFormProps) {
             console.log('Should be Impossible!')
         } else if (questionNumber == 0) {
             console.log('Moving to the previous page')
+            sayTheThing(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
         } else {
             console.log('Previous Question!')
+            sayTheThing(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
         }
     }
@@ -183,7 +188,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 <ShadowQuestion shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
                     <CommonButton onClick={previousQuestion} text={"Назад"} />
-                    <CommonButton onClick={} text={"Повторить"} />
+                    <CommonButton onClick={repeatItPlease} text={"Повторить"} />
                     <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
