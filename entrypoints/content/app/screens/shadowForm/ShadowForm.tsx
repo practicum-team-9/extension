@@ -6,6 +6,7 @@ import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
 import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
 import { useThingsToSay } from "@/entrypoints/hooks/useSettingsData/useThingsToSay";
 import { HTMLInputTypeAttribute } from "react";
+import { getCurrentFormID } from "@/entrypoints/content/scripts/utilityScripts/getCurrentFormID";
 
 interface iShadowFormProps {
     previousScreen: () => void;
@@ -15,7 +16,7 @@ interface iShadowFormProps {
 
 // To submit the form
 interface iSubmitAnswers {
-    [key: string] : string,
+    [key: string] : any,
 }
 
 
@@ -133,7 +134,15 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
+        if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {                
+            const checked = e.target.checked
+            setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: checked}))            
+        } else if (e.target instanceof HTMLSelectElement) {
+            const optionId = e.target.options[e.target.selectedIndex].id
+            setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: [optionId]}))
+        } else {
+            setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
+        }
         // console.log('Change!\n Name: ', name , ' Value: ' , value)
         // console.log(formState)
         setIsValid(e.target.checkValidity())
@@ -146,6 +155,23 @@ export default function ShadowForm(props: iShadowFormProps) {
         console.log('Submitting!...')
         console.log()
         console.log(formState)
+
+        const id = getCurrentFormID()
+        const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
+        fetch(fetchUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formState)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            props.nextScreen()
+        })
+        .catch(error => console.error('Error:', error));
+
     }
 
     useEffect(() => {
