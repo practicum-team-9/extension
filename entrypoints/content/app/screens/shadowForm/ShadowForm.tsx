@@ -1,5 +1,5 @@
 import "@/assets/tailwind.css";
-import { iShadowFormData } from "../../App";
+import { iShadowFormData, iShadowFormDropDownItemsData } from "../../App";
 import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
 import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
@@ -13,7 +13,7 @@ interface iShadowFormProps {
 
 // To submit the form
 interface iSubmitAnswers {
-    [key: string] : string[],
+    [key: string] : string,
 }
 
 
@@ -25,6 +25,7 @@ export interface iShadowFormPageItemsFormatted {
     multiline: boolean,
     type: string,
     widget?: boolean,
+    items?: iShadowFormDropDownItemsData[],
     validations?: {type: string}[],
     validationArray: string[],
     questionType: HTMLInputTypeAttribute,
@@ -53,7 +54,7 @@ export default function ShadowForm(props: iShadowFormProps) {
     const [ questionNumber, setQuestionNumber ] = useState(0)
     const [ pageNumber, setPageNumber ] = useState(0)
     const [ isValid, setIsValid ] = useState(true)
-    const [ formState, setFormState ] = useState<iSubmitAnswers>()
+    const [ formState, setFormState ] = useState<iSubmitAnswers>({})
     const [ formattedData, setFormattedData ] = useState<iShadowFormFormatted>({
         footer: true,
         id: 'Загружаем...',
@@ -122,6 +123,13 @@ export default function ShadowForm(props: iShadowFormProps) {
         sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
+        console.log('Change!\n Name: ', name , ' Value: ' , value)
+        console.log(formState)
+    };
+
     useEffect(() => {
         const { pages } = props.shadowFormData
         var itemsArray: iShadowFormPageItemsFormatted[]
@@ -147,8 +155,11 @@ export default function ShadowForm(props: iShadowFormProps) {
                     speech += 'Введите дату в формате День Месяц Год.'
                     questionType = 'date'
                 } else if (item.type === 'enum') {
-                    speech += 'Выберите один вариант из предложенных.'
+                    speech += 'Выберите один вариант из предложенных: \n'
                     questionType = 'dropdown'
+                    item.items?.forEach((dropDownItem) => {
+                        speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
+                    })
                 } else if (item.type === 'boolean') {
                     speech += 'Нажмите поле чтобы подтвердить или снять подтверждение.'
                     questionType = 'checkbox'
@@ -185,7 +196,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <ShadowQuestion shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
+                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
                 <div className="flex flex-row justify-between">
                     <CommonButton onClick={previousQuestion} text={"Назад"} />
                     <CommonButton onClick={repeatItPlease} text={"Повторить"} />

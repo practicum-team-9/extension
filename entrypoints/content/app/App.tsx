@@ -8,6 +8,10 @@ import StartingScreen from "./screens/startingScreen/StartingScreen";
 import ShadowForm from "./screens/shadowForm/ShadowForm";
 import FinalScreen from "./screens/finalScreen/FinalScreen";
 
+export interface iShadowFormDropDownItemsData {
+    id: string,
+    label: string,
+}
 
 export interface iShadowFormPageItemsData {
     hidden: boolean,
@@ -15,6 +19,7 @@ export interface iShadowFormPageItemsData {
     label: string,
     multiline: boolean,
     type: string,
+    items?: iShadowFormDropDownItemsData[],
     widget?: boolean,
     validations?: {type: string}[]
 }
