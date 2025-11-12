@@ -53,8 +53,8 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
                 </div>
-                <select value={props.formState[id] ? props.formState[id].value : ' '} onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={selectRef}>
-                    <option selected disabled value='Не выбрано'>Выберите значение!</option>
+                <select value={props.formState[id] ? props.formState[id].value : 'Не выбрано'} onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={selectRef}>
+                    <option disabled value='Не выбрано'>Выберите значение!</option>
                     {
                         items?.map((item, index) => (
                         <option key={index} id={item.id} value={item.label} className="dark:bg-[#262626]">{item.label}</option>
