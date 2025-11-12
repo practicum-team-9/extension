@@ -29,14 +29,10 @@ export default function Popup() {
         console.log('SAVING SETTINGS DATA')
         console.log(settingsData)
         e.preventDefault();
-        // chrome.storage.local.set({ settingsData }, () => {
-        //     console.log('Сохранено!')
-        // })   
     }
 
     useEffect(() => {
         console.log('Применяю настройки!')
-        //document.documentElement.classList.toggle( "dark",  settingsData.isLightTheme ||    (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches));
         document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
     }, [settingsData])
 

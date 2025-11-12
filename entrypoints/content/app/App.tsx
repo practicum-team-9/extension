@@ -58,7 +58,7 @@ export default function App() {
         name: 'Загружаем',
         pages: [],
         teaser: true,
-    }); // Or null, or an empty object, depending on your data structure
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -85,8 +85,7 @@ export default function App() {
                 finalScreen: false
             }
         )
-    }
-    
+    }    
     
     const showTheStartingScreen = () => {
         setElementsVisibility(
@@ -111,15 +110,12 @@ export default function App() {
             try {
                 const id = getCurrentFormID()
                 const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
-                // console.log(id)
-                // console.log(fetchUrl)
                 const response = await fetch(fetchUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json();
                 setFormData(result);
-                // console.log(result)
             } catch (error) {
                 console.log(error);
             } finally {
@@ -134,32 +130,6 @@ export default function App() {
 
         fetchData();
     }, []);
-
-/*
-
-    try {
-        chrome.storage.local.get(["settingsData"], async (result) => {
-            // console.log('SOUND: Getting data from storage')
-            if (result.settingsData.isSoundOn) {
-                // console.log(thing)
-                var utterance = new SpeechSynthesisUtterance(thing);
-                window.speechSynthesis.cancel()
-                window.speechSynthesis.speak(utterance)
-            } 
-            // else {
-            //     console.log('The sound is off!')
-            // }
-        });
-        return true;
-    } 
-    catch (e) {
-        console.log('Error occurred while trying to speak!')
-        console.log(e)
-    }
-
-    return true;
-*/
-
 
     useEffect(() => {
         try  {
@@ -189,7 +159,15 @@ export default function App() {
                     startInDOM={startInDOM} 
                     startWithout={hideModal} 
                     startInShadowForm={startInShadowForm}
-                    showTheFinalScreen={showTheFinalScreen}  /> : 
+                    showTheFinalScreen={showTheFinalScreen} 
+                    showLoader={() => {
+                        setLoading(true)
+                        setElementsVisibility({
+                            startingScreen: false,
+                            shadowForm: false,
+                            finalScreen: false
+                        })
+                    }} /> : 
                     <></> }
                 </>
                 <>
