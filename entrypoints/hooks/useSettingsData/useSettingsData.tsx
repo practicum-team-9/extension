@@ -29,8 +29,6 @@ export const useSettingsData = () => {
         console.log(settingsData)
         chrome.storage.local.set({ settingsData }, () => {
             console.log('Сохранено!')
-            document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme ||    (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches),);
-            console.log(settingsData)
         }) 
     }, [settingsData]);
 

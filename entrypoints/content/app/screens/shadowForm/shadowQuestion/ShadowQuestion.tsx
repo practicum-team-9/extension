@@ -1,8 +1,4 @@
 import "@/assets/tailwind.css";
-import { iShadowFormPageItemsData } from "../../../App";
-import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
-import { useThingsToSay } from "@/entrypoints/hooks/useSettingsData/useThingsToSay";
-import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
 import { iShadowFormPageItemsFormatted, iSubmitAnswers } from "../ShadowForm";
 
 interface iShadowQuestionProps {

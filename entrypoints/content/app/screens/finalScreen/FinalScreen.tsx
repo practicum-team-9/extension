@@ -1,6 +1,5 @@
 import "@/assets/tailwind.css";
 import WideBtn from "../../components/buttons/btnContainers/WideBtn";
-import CommonBtn from "../../components/buttons/btnContainers/CommonBtn";
 import CommonButton from "../../components/buttons/CommonButton";
 import AccentButton from "../../components/buttons/AccentButton";
 

@@ -14,13 +14,11 @@ interface iShadowFormProps {
     shadowFormData: iShadowFormData
 }
 
-// To submit the form
 export interface iSubmitAnswers {
     [key: string] : any,
 }
 
 
-// Formatting data to work with
 export interface iShadowFormPageItemsFormatted {
     hidden: boolean,
     id: string,
@@ -97,28 +95,21 @@ export default function ShadowForm(props: iShadowFormProps) {
             if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // console.log('Next Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
-            // sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
         }
     }
 
     const previousQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
-
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            //console.log('Moving to the previous page')
             sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            //console.log('Previous Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
@@ -144,7 +135,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        // console.log('Change!\n Name: ', name , ' Value: ' , value)
         console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
@@ -175,7 +165,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         })
         .then(response => response.json())
         .then(data => {
-            // console.log(data)
             props.nextScreen()
         })
         .catch(error => console.error('Error:', error));
