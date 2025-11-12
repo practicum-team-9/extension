@@ -13,37 +13,32 @@ export default function Popup() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: value}))
-        console.log(value)
-        console.log(settingsData)
     };
+
     const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
-        console.log(settingsData)
-        console.log(checked)
     };
 
-
-    const handleToggleExtension = (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleChecked(e)
-        chrome.storage.local.set({ settingsData }, () => {
-            alert('Сохранено!')
-        })
-        console.log(settingsData)
+    const handleToggleDarkMode = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, checked } = e.target;
+        setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
     };
 
-    const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
         console.log('SAVING SETTINGS DATA')
         console.log(settingsData)
         e.preventDefault();
-        chrome.storage.local.set({ settingsData }, () => {
-            alert('Сохранено! Для применения перезагрузите сстраницу!')
-        })        
-        const response = await chrome.runtime.sendMessage({ type: "settingsDataChanged", payload: settingsData });
-        console.log("Received response from background:", response);
-
-        return true;
+        // chrome.storage.local.set({ settingsData }, () => {
+        //     console.log('Сохранено!')
+        // })   
     }
+
+    useEffect(() => {
+        console.log('Применяю настройки!')
+        //document.documentElement.classList.toggle( "dark",  settingsData.isLightTheme ||    (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches));
+        document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
+    }, [settingsData])
 
     return (
         <div className="w-[500px] m-1 p-6 flex flex-col gap-6 rounded-xl  border 
@@ -52,14 +47,17 @@ export default function Popup() {
             <div className="w-[424px] h-[48px] flex justify-around items-center">
                 <Logo />
                 <h1 className='text-3xl text-center'>YaForms accessibility</h1>
-                <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleToggleExtension} />
+                <SimpleToggle name="isExtensionOn" isChecked={settingsData.isExtensionOn} onChange={handleChecked} />
             </div>
             <FancyToggle onChange={handleChecked} name="isSoundOn" isChecked={settingsData.isSoundOn} isDisabled={!settingsData.isExtensionOn}>
                 <VolumeToggle textOn="Включить" textOff="Выключить" />
             </FancyToggle>
+            <FancyToggle onChange={handleToggleDarkMode} name="isLightTheme" isChecked={settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn}>
+                <ThemeToggle textOn="Светлая тема" textOff="Темная тема" />
+            </FancyToggle>
             <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
             <label>
-                <input type="text" name="apiKey" placeholder={settingsData.apiKey ? settingsData.apiKey :"Введите ваш API ключ."} className='text-2xl text-center rounded-2xl w-full p-1 min-h-[64px] 
+                <input value={settingsData.apiKey} type="text" name="apiKey" placeholder={"Введите ваш API ключ"} className='text-2xl text-center rounded-2xl w-full p-1 min-h-[64px] 
                 bg-[#E5E5E5] dark:bg-gray-500' onChange={handleChange} />
             </label>
             <button type="submit" onClick={handleSubmit} className="transition text-2xl text-center  rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer border-2

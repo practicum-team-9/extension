@@ -50,7 +50,7 @@ interface iElementsVisibility {
 
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
-    const { settingsData } = useSettingsData();
+    const { settingsData, setSettingsData } = useSettingsData();
     const [formData, setFormData] = useState<iShadowFormData>({
         footer: true,
         id: 'Загружаем...',
@@ -134,6 +134,48 @@ export default function App() {
 
         fetchData();
     }, []);
+
+/*
+
+    try {
+        chrome.storage.local.get(["settingsData"], async (result) => {
+            // console.log('SOUND: Getting data from storage')
+            if (result.settingsData.isSoundOn) {
+                // console.log(thing)
+                var utterance = new SpeechSynthesisUtterance(thing);
+                window.speechSynthesis.cancel()
+                window.speechSynthesis.speak(utterance)
+            } 
+            // else {
+            //     console.log('The sound is off!')
+            // }
+        });
+        return true;
+    } 
+    catch (e) {
+        console.log('Error occurred while trying to speak!')
+        console.log(e)
+    }
+
+    return true;
+*/
+
+
+    useEffect(() => {
+        try  {
+            chrome.storage.local.get(["settingsData"], async (result) => {
+                setSettingsData(result.settingsData)
+            });    
+        } catch {
+            console.log('Error!')
+        }
+    }, [elementsVisibility])
+
+    useEffect(() => {              
+        console.log('Settings data application')
+        console.log(settingsData)
+        document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
+    }, [settingsData])
 
 
     return (

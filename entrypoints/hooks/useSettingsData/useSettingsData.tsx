@@ -16,7 +16,6 @@ export const useSettingsData = () => {
     })
     
     useEffect(() => {
-        console.log('useEffect Firing!')
         chrome.storage.local.get(["settingsData"], (result) => {
             console.log('Getting data from storage')
             if (result.settingsData) {
@@ -24,6 +23,16 @@ export const useSettingsData = () => {
             }
         });
     }, []);
+    
+    useEffect(() => {
+        console.log('Change in settings data detected')
+        console.log(settingsData)
+        chrome.storage.local.set({ settingsData }, () => {
+            console.log('Сохранено!')
+            document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme ||    (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches),);
+            console.log(settingsData)
+        }) 
+    }, [settingsData]);
 
     return { settingsData, setSettingsData };
 }

@@ -9,12 +9,6 @@ interface fancyToggleProps {
     onChange: (e:any) => void;
 }
 
-/*
-
-            bg-[#E5E5E5] peer-checked:bg-[#89A7FF] after:bg-white
-            dark:bg-gray-500 dark:peer-checked:bg-[#123CA9] dark:after:bg-white
-*/
-
 export default function FancyToggle(props: fancyToggleProps) {
     return (
         <label className="inline-flex w-[364px] h-[64px] justify-between items-center rounded-2xl cursor-pointer">
