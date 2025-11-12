@@ -14,13 +14,11 @@ interface iShadowFormProps {
     shadowFormData: iShadowFormData
 }
 
-// To submit the form
-interface iSubmitAnswers {
+export interface iSubmitAnswers {
     [key: string] : any,
 }
 
 
-// Formatting data to work with
 export interface iShadowFormPageItemsFormatted {
     hidden: boolean,
     id: string,
@@ -82,8 +80,6 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
@@ -99,28 +95,21 @@ export default function ShadowForm(props: iShadowFormProps) {
             if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // console.log('Next Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
-            // sayTheThing(formattedData.pages[pageNumber].items[questionNumber].speech)
         }
     }
 
     const previousQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
-
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            //console.log('Moving to the previous page')
             sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            //console.log('Previous Question!')
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
@@ -146,11 +135,18 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        // console.log('Change!\n Name: ', name , ' Value: ' , value)
-        // console.log(formState)
+        console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
-            sayTheThingWrapper(`Вы ввели ${value}`)
+            if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    sayTheThingWrapper(`Вы отметили поле.`)
+                } else {
+                    sayTheThingWrapper(`Вы сняли отметку.`)
+                }
+            } else {
+                sayTheThingWrapper(`Вы ввели ${value}`)
+            }
         }, 1000)
     };
 
@@ -169,7 +165,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         })
         .then(response => response.json())
         .then(data => {
-            // console.log(data)
             props.nextScreen()
         })
         .catch(error => console.error('Error:', error));
@@ -260,7 +255,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
+                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]} formState={formState}/>
                 <div className="flex flex-row justify-between">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={previousQuestion} text={"Назад"} />

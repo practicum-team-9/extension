@@ -50,7 +50,7 @@ interface iElementsVisibility {
 
 export default function App() {
     const [isModalVisible, setIsModalVisible] = useState(true)
-    const { settingsData } = useSettingsData();
+    const { settingsData, setSettingsData } = useSettingsData();
     const [formData, setFormData] = useState<iShadowFormData>({
         footer: true,
         id: 'Загружаем...',
@@ -58,7 +58,7 @@ export default function App() {
         name: 'Загружаем',
         pages: [],
         teaser: true,
-    }); // Or null, or an empty object, depending on your data structure
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -85,8 +85,7 @@ export default function App() {
                 finalScreen: false
             }
         )
-    }
-    
+    }    
     
     const showTheStartingScreen = () => {
         setElementsVisibility(
@@ -111,15 +110,12 @@ export default function App() {
             try {
                 const id = getCurrentFormID()
                 const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
-                // console.log(id)
-                // console.log(fetchUrl)
                 const response = await fetch(fetchUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json();
                 setFormData(result);
-                // console.log(result)
             } catch (error) {
                 console.log(error);
             } finally {
@@ -135,6 +131,22 @@ export default function App() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        try  {
+            chrome.storage.local.get(["settingsData"], async (result) => {
+                setSettingsData(result.settingsData)
+            });    
+        } catch {
+            console.log('Error!')
+        }
+    }, [elementsVisibility])
+
+    useEffect(() => {              
+        console.log('Settings data application')
+        console.log(settingsData)
+        document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
+    }, [settingsData])
+
 
     return (
         <div>
@@ -146,7 +158,16 @@ export default function App() {
                     isVisible={elementsVisibility.startingScreen} 
                     startInDOM={startInDOM} 
                     startWithout={hideModal} 
-                    startInShadowForm={startInShadowForm} /> : 
+                    startInShadowForm={startInShadowForm}
+                    showTheFinalScreen={showTheFinalScreen} 
+                    showLoader={() => {
+                        setLoading(true)
+                        setElementsVisibility({
+                            startingScreen: false,
+                            shadowForm: false,
+                            finalScreen: false
+                        })
+                    }} /> : 
                     <></> }
                 </>
                 <>
