@@ -46,9 +46,9 @@ export default function Popup() {
     }
 
     return (
-        <div className="w-[500px] m-3 p-6 flex flex-col gap-6 rounded-xl  border 
+        <div className="w-[500px] m-1 p-6 flex flex-col gap-6 rounded-xl  border 
         bg-white border-[#E5E5E5] 
-        dark:bg-black dark:border-[#262626] dark:text-white">
+        dark:bg-black/85 dark:border-[#262626] dark:text-white">
             <div className="w-[424px] h-[48px] flex justify-around items-center">
                 <Logo />
                 <h1 className='text-3xl text-center'>YaForms accessibility</h1>
@@ -63,12 +63,13 @@ export default function Popup() {
                 bg-[#E5E5E5] dark:bg-gray-500' onChange={handleChange} />
             </label>
             <button type="submit" onClick={handleSubmit} className="transition text-2xl text-center  rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer border-2
-            text-white bg-[#262626] border-[#262626]
+            text-white 
+            bg-[#262626] border-[#262626]
             hover:bg-[#262626]/85 hover:border-[#262626]/85 
             focus:bg-[#262626]/85 focus:border-[#262626]            
-            dark:bg-white dark:text-black dark:border-black
-            dark:hover:bg-[#E5E5E5] dark:hover:border-[#E5E5E5] 
-            dark:focus:bg-[#E5E5E5] dark:focus:border-black   
+            dark:bg-[#4b71d6] dark:border-[#4b71d6]
+            dark:hover:bg-[#638fff] dark:hover:border-[#638fff]
+            dark:focus:bg-[#638fff] dark:focus:border-[#4b71d6]   
             ">
             💾 Сохранить
             </button>
