@@ -146,7 +146,8 @@ export default function App() {
                     isVisible={elementsVisibility.startingScreen} 
                     startInDOM={startInDOM} 
                     startWithout={hideModal} 
-                    startInShadowForm={startInShadowForm} /> : 
+                    startInShadowForm={startInShadowForm}
+                    showTheFinalScreen={showTheFinalScreen}  /> : 
                     <></> }
                 </>
                 <>

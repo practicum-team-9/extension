@@ -19,9 +19,9 @@ export default function CommonButton(props: iButtonProps) {
         active:bg-[#FFFFFF] active:border-[#E5E5E5] active:text-[#E5E5E5]
         disabled:bg-[#E5E5E5] disabled:border-[#E5E5E5] disabled:text-white
         dark:bg-[#262626] dark:text-white dark:border-white
-        dark:hover:bg-black dark:hover:border-black
-        dark:focus:bg-black dark:focus:border-white    
-        dark:active:bg-black dark:active:border-[#262626] dark:active:text-[#E5E5E5]
+        dark:hover:bg-[#4D4D4D] dark:hover:border-[#4D4D4D]
+        dark:focus:bg-[#4D4D4D] dark:focus:border-white    
+        dark:active:bg-[#4D4D4D] dark:active:border-[#4D4D4D] dark:active:text-[#E5E5E5]
         dark:disabled:bg-[#262626] dark:disabled:border-[#4D4D4D] dark:disabled:text-[#4D4D4D]"
         >
             {props.text}

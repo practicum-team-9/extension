@@ -82,8 +82,6 @@ export default function ShadowForm(props: iShadowFormProps) {
 
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
-        // console.log('Question N', questionNumber, 'Max Questions: ', props.shadowFormData.pages[pageNumber].items.length )
-        // console.log('Page N', pageNumber, 'Max Pages: ', props.shadowFormData.pages.length )
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()

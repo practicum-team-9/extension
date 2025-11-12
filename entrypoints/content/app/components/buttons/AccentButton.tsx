@@ -20,8 +20,8 @@ export default function AccentButton(props: iButtonProps) {
         disabled:bg-[#E5E5E5] disabled:border-[#E5E5E5]
         dark:bg-[#4b71d6] dark:text-white dark:border-[#4b71d6]
         dark:hover:bg-[#638fff] dark:hover:border-[#638fff]
-        dark:focus:bg-[#638fff] dark:focus:border-[#4b71d6]        
-        dark:active:bg-black dark:active:border-[#262626] dark:active:text-[#E5E5E5]
+        dark:focus:bg-[#638fff] dark:focus:border-[#4b71d6]            
+        dark:active:bg-[#4D4D4D] dark:active:border-[#4D4D4D] dark:active:text-[#E5E5E5]
         dark:disabled:bg-[#262626] dark:disabled:border-[#4D4D4D] dark:disabled:text-[#4D4D4D]"
         >
             {props.text}

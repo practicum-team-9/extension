@@ -8,6 +8,7 @@ interface iStartingScreenProps {
     startInDOM: (event: React.MouseEvent<HTMLButtonElement>) => void;
     startInShadowForm: (event: React.MouseEvent<HTMLButtonElement>) => void;
     startWithout: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    showTheFinalScreen: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function StartingScreen(props: iStartingScreenProps) {
@@ -22,6 +23,9 @@ export default function StartingScreen(props: iStartingScreenProps) {
             </MenuBtn>
             <MenuBtn>
                 <CommonButton text='Начать (Устаревшее)' onClick={props.startInDOM}/>
+            </MenuBtn>
+            <MenuBtn>
+                <CommonButton text='Показать последний' onClick={props.showTheFinalScreen}/>
             </MenuBtn>
         </div>
     )

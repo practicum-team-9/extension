@@ -56,7 +56,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <option selected disabled value='Не выбрано'>Выберите значение!</option>
                     {
                         items?.map((item, index) => (
-                        <option key={index} id={item.id} value={item.label}>{item.label}</option>
+                        <option key={index} id={item.id} value={item.label} className="dark:bg-[#262626]">{item.label}</option>
                     ))
                     }
                 </select>
