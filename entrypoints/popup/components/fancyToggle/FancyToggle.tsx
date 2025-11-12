@@ -9,11 +9,20 @@ interface fancyToggleProps {
     onChange: (e:any) => void;
 }
 
+/*
+
+            bg-[#E5E5E5] peer-checked:bg-[#89A7FF] after:bg-white
+            dark:bg-gray-500 dark:peer-checked:bg-[#123CA9] dark:after:bg-white
+*/
+
 export default function FancyToggle(props: fancyToggleProps) {
     return (
         <label className="inline-flex w-[364px] h-[64px] justify-between items-center rounded-2xl cursor-pointer">
             <input disabled={props.isDisabled} type="checkbox" checked={props.isChecked } value="" className="sr-only peer" name={props.name} onChange={props.onChange} />
-            <div className="relative w-full h-full bg-[#E5E5E5] peer-focus:outline-none rounded-2xl peer after:right-0 peer-checked:after:-translate-x-full rtl:peer-checked:after:translate-x-full after:content-[''] after:absolute after:bg-[#89A7FF] after:rounded-2xl after:h-full after:w-[50%] after:transition-all peer-checked:after:bg-[#89A7FF]">
+            <div className="relative w-full h-full peer-focus:outline-none rounded-2xl peer after:right-0 peer-checked:after:-translate-x-full rtl:peer-checked:after:translate-x-full after:content-[''] after:absolute after:rounded-2xl after:h-full after:w-[50%] after:transition-all
+            bg-[#E5E5E5]  after:bg-[#89A7FF] peer-checked:after:bg-[#89A7FF]
+            dark:bg-gray-500 dark:after:bg-[#123CA9] dark:peer-checked:after:bg-[#123CA9]
+            peer-disabled::after:bg-[#E5E5E5] dark:peer-disabled:after:bg-gray-500">
                {props.children}
             </div>
         </label>
