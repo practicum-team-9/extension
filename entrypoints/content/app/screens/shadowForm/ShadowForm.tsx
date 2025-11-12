@@ -15,7 +15,7 @@ interface iShadowFormProps {
 }
 
 // To submit the form
-interface iSubmitAnswers {
+export interface iSubmitAnswers {
     [key: string] : any,
 }
 
@@ -145,10 +145,18 @@ export default function ShadowForm(props: iShadowFormProps) {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
         // console.log('Change!\n Name: ', name , ' Value: ' , value)
-        // console.log(formState)
+        console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
-            sayTheThingWrapper(`Вы ввели ${value}`)
+            if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    sayTheThingWrapper(`Вы отметили поле.`)
+                } else {
+                    sayTheThingWrapper(`Вы сняли отметку.`)
+                }
+            } else {
+                sayTheThingWrapper(`Вы ввели ${value}`)
+            }
         }, 1000)
     };
 
@@ -258,7 +266,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]}/>
+                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]} formState={formState}/>
                 <div className="flex flex-row justify-between">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={previousQuestion} text={"Назад"} />
