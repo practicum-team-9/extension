@@ -73,11 +73,6 @@ export default function Popup() {
             <FancyToggle onChange={handleToggleDarkMode} name="isLightTheme" isChecked={settingsData.isLightTheme} isDisabled={!settingsData.isExtensionOn}>
                 <ThemeToggle textOn="Светлая тема" textOff="Темная тема" />
             </FancyToggle>
-            <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
-            <label>
-                <input value={settingsData.apiKey} type="text" name="apiKey" placeholder={"Введите ваш API ключ"} className='text-2xl text-center rounded-2xl w-full p-1 min-h-[64px] 
-                bg-[#E5E5E5] dark:bg-gray-500' onChange={handleChange} />
-            </label>
             <button type="submit" onClick={handleSubmit} className="transition text-2xl text-center  rounded-2xl w-[50%] p-1 min-h-[64px] self-center cursor-pointer border-2
             text-white 
             bg-[#262626] border-[#262626]
@@ -92,3 +87,12 @@ export default function Popup() {
         </div>
     )
 }
+
+/* 
+
+            <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
+            <label>
+                <input value={settingsData.apiKey} type="text" name="apiKey" placeholder={"Введите ваш API ключ"} className='text-2xl text-center rounded-2xl w-full p-1 min-h-[64px] 
+                bg-[#E5E5E5] dark:bg-gray-500' onChange={handleChange} />
+            </label>
+            */ 
