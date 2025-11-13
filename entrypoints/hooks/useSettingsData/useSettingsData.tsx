@@ -17,10 +17,10 @@ export const useSettingsData = () => {
     
     useEffect(() => {
         chrome.storage.local.get(["settingsData"], (result) => {
-            console.log('Getting data from storage')
+            // console.log('Getting data from storage')
             if (result.settingsData) {
-                console.log('Полученные данные')
-                console.log(settingsData)
+                // console.log('Полученные данные')
+                // console.log(settingsData)
                 setSettingsData(result.settingsData)
             } else {
                 setSettingsData({                    
