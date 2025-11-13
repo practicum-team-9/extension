@@ -17,6 +17,7 @@ export interface iShadowFormPageItemsData {
     hidden: boolean,
     id: string,
     label: string,
+    comment?: string,
     multiline: boolean,
     type: string,
     items?: iShadowFormDropDownItemsData[],
@@ -142,9 +143,9 @@ export default function App() {
     }, [elementsVisibility])
 
     useEffect(() => {              
-        console.log('Settings data application')
-        console.log(settingsData)
-        document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
+        // console.log('Settings data application')
+        // console.log(settingsData)
+        document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData?.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
     }, [settingsData])
 
 

@@ -23,6 +23,7 @@ export interface iShadowFormPageItemsFormatted {
     hidden: boolean,
     id: string,
     label: string,
+    comment?: string,
     multiline: boolean,
     type: string,
     widget?: boolean,
@@ -88,14 +89,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
             if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
         }
     }
@@ -105,12 +106,12 @@ export default function ShadowForm(props: iShadowFormProps) {
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
         }
@@ -135,7 +136,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        console.log(formState)
+        // console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
             if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
@@ -151,8 +152,8 @@ export default function ShadowForm(props: iShadowFormProps) {
     };
 
     const submitFormAnsers = () => {
-        console.log('Submitting!...')
-        console.log(formState)
+        // console.log('Submitting!...')
+        // console.log(formState)
 
         const id = getCurrentFormID()
         const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
@@ -190,8 +191,13 @@ export default function ShadowForm(props: iShadowFormProps) {
 
                 })
                 if (validationsArray.includes('required')) {
-                    speech += 'Это обязательный вопрос.'
+                    speech += 'Это обязательный вопрос\n'
                 }
+                speech += `${item.label}\n`
+                if (item.comment) {
+                    speech += `${item.comment}`
+                }
+                
                 if (item.type === 'date') {
                     speech += 'Введите дату в формате День Месяц Год.'
                     questionType = 'date'
@@ -238,6 +244,13 @@ export default function ShadowForm(props: iShadowFormProps) {
 
 
     useEffect(() => {
+        // console.log('On new Question Speech')
+
+        if (formattedData) {
+            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+            // console.log(formattedData.pages[pageNumber].items[questionNumber].speech)
+            }
+
         const keyboardPressed = (event: KeyboardEvent) => {
             if (event.key === 'Enter' && isValid) {
                 //console.log(formattedData)
