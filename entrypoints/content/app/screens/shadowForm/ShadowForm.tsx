@@ -23,6 +23,7 @@ export interface iShadowFormPageItemsFormatted {
     hidden: boolean,
     id: string,
     label: string,
+    comment?: string,
     multiline: boolean,
     type: string,
     widget?: boolean,
@@ -193,6 +194,9 @@ export default function ShadowForm(props: iShadowFormProps) {
                     speech += 'Это обязательный вопрос\n'
                 }
                 speech += `${item.label}\n`
+                if (item.comment) {
+                    speech += `${item.comment}`
+                }
                 
                 if (item.type === 'date') {
                     speech += 'Введите дату в формате День Месяц Год.'

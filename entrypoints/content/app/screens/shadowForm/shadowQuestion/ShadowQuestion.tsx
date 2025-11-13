@@ -10,13 +10,12 @@ interface iShadowQuestionProps {
 
 
 export default function ShadowQuestion(props: iShadowQuestionProps) {
-    const { hidden, id, label, multiline, type, widget, validations, validationArray, questionType, speech, items } = props.shadowQuestionData
+    const { hidden, id, label, multiline, type, widget, validations, validationArray, questionType, speech, items, comment } = props.shadowQuestionData
     const inputRef = useRef<HTMLInputElement>(null) 
     const textRef = useRef<HTMLTextAreaElement>(null) 
     const selectRef = useRef<HTMLSelectElement>(null) 
 
     useEffect(() => {
-        //console.log('Locking in... ')
         if (inputRef.current) {
             inputRef.current.focus();
         } else if (textRef.current) {
@@ -35,6 +34,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                         *
                     </div> : null}
                     <label htmlFor={id} className="text-3xl">{label}</label>
+                    { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
                 </div>
                 <input value={props.formState[id] ? props.formState[id].value : '2000-01-01'} onChange={props.onChange} name={id} id={id} type='date' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}/>
             </>
@@ -47,7 +47,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-3xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-3xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
                 <select value={props.formState[id] ? props.formState[id].value : 'Не выбрано'} onChange={props.onChange} name={id} id={id} className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={selectRef}>
                     <option disabled value='Не выбрано'>Выберите значение!</option>
@@ -68,7 +71,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-2xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-2xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
             </div>
         )
@@ -80,7 +86,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-3xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-3xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
                 <input value={props.formState[id] ? props.formState[id].value : ' '} onChange={props.onChange} name={id} id={id} type='email' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
             </>
@@ -93,7 +102,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-3xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-3xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
                 <input value={props.formState[id] ? props.formState[id].value : ' '} onChange={props.onChange} name={id} id={id} type='tel' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef} />
             </>
@@ -106,7 +118,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-3xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-3xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
                 <textarea value={props.formState[id] ? props.formState[id].value : ' '} onChange={props.onChange} name={id} id={id} rows={6} required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={textRef} />
             </>
@@ -119,7 +134,10 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
                     <div className="text-red-600 text-3xl">
                         *
                     </div> : null}
-                    <label htmlFor={id} className="text-3xl">{label}</label>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor={id} className="text-3xl">{label}</label>
+                        { comment ? <span className="text-[#262626]/60 text-xl">{comment}</span> : null}
+                    </div>
                 </div>
                 <input value={props.formState[id] ? props.formState[id].value : ' '} onChange={props.onChange} name={id} id={id} type='text' required={validationArray.includes('required') } className="text-3xl w-full rounded-md border-2 border-[#E5E5E5] pt-4 pb-4 pl-2 pr-2" ref={inputRef}/>
             </>
