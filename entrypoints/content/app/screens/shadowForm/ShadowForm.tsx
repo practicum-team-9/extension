@@ -89,14 +89,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
             if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
         }
     }
@@ -106,12 +106,12 @@ export default function ShadowForm(props: iShadowFormProps) {
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
+            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
         }
@@ -244,6 +244,12 @@ export default function ShadowForm(props: iShadowFormProps) {
 
 
     useEffect(() => {
+        console.log('On new Question Speech')
+        if (formattedData) {
+            sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+            // console.log(formattedData.pages[pageNumber].items[questionNumber].speech)
+            }
+
         const keyboardPressed = (event: KeyboardEvent) => {
             if (event.key === 'Enter' && isValid) {
                 //console.log(formattedData)
@@ -257,13 +263,13 @@ export default function ShadowForm(props: iShadowFormProps) {
         }
     }, [formattedData, isValid, pageNumber, questionNumber])
 
-    useEffect(() => {
-        console.log('Initial Speech')
-        if (formattedData) {
-            sayTheThingWrapper(formattedData.pages[0].items[0].speech)
-            // console.log(formattedData.pages[0].items[0].speech)
-        }
-    }, [])
+    // useEffect(() => {
+    //     console.log('Initial Speech')
+    //     if (formattedData) {
+    //         sayTheThingWrapper(formattedData.pages[0].items[0].speech)
+    //         // console.log(formattedData.pages[0].items[0].speech)
+    //     }
+    // }, [])
 
     return (
         <div className="flex flex-col items-center ">
