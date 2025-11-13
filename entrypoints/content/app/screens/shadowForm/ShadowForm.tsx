@@ -190,8 +190,10 @@ export default function ShadowForm(props: iShadowFormProps) {
 
                 })
                 if (validationsArray.includes('required')) {
-                    speech += 'Это обязательный вопрос.'
+                    speech += 'Это обязательный вопрос\n'
                 }
+                speech += `${item.label}\n`
+                
                 if (item.type === 'date') {
                     speech += 'Введите дату в формате День Месяц Год.'
                     questionType = 'date'
@@ -250,6 +252,14 @@ export default function ShadowForm(props: iShadowFormProps) {
             document.removeEventListener('keydown', keyboardPressed)
         }
     }, [formattedData, isValid, pageNumber, questionNumber])
+
+    useEffect(() => {
+        console.log('Initial Speech')
+        if (formattedData) {
+            sayTheThingWrapper(formattedData.pages[0].items[0].speech)
+            // console.log(formattedData.pages[0].items[0].speech)
+        }
+    }, [])
 
     return (
         <div className="flex flex-col items-center ">
