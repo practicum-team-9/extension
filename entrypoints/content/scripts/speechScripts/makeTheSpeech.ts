@@ -5,7 +5,7 @@ export interface iMakeTheSpeech {
 }
 
 export const makeTheSpeech = (props: iMakeTheSpeech) => {
-    console.log(props.questionType)
+    // console.log(props.questionType)
     props.text = props.text.replace("*", "");
     props.text = props.text.replace("Обязательное поле", "");
     var speech = "";

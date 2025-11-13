@@ -2,7 +2,7 @@ export const sayTheThing = async (thing: string) => {
     try {
         chrome.storage.local.get(["settingsData"], async (result) => {
             if (result.settingsData.isSoundOn) {
-                console.log(thing)
+                // console.log(thing)
                 var utterance = new SpeechSynthesisUtterance(thing);
                 window.speechSynthesis.cancel()
                 window.speechSynthesis.speak(utterance)

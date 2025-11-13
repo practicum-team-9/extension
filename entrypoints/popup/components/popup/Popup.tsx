@@ -28,8 +28,8 @@ export default function Popup() {
     };
 
     const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
-        console.log('SAVING SETTINGS DATA')
-        console.log(settingsData)
+        // console.log('SAVING SETTINGS DATA')
+        // console.log(settingsData)
         e.preventDefault();
         saveSettingsData(settingsData)
     }
@@ -41,20 +41,20 @@ export default function Popup() {
     }
 
     useEffect(() => {
-        console.log(' Первоначальная настройка попапа!')
+        // console.log(' Первоначальная настройка попапа!')
         chrome.storage.local.get(["settingsData"], (result) => {
-            console.log('Getting data from storage')
+            // console.log('Getting data from storage')
             if (result.settingsData) {
                 setSettingsData(result.settingsData)
-                console.log(settingsData)
+                // console.log(settingsData)
                 document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
             }
         });
     }, [])
 
     useEffect(() => {
-        console.log('Применяю настройки!')
-        console.log(settingsData)
+        // console.log('Применяю настройки!')
+        // console.log(settingsData)
         document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
     }, [settingsData])
 

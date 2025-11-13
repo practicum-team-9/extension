@@ -136,7 +136,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        console.log(formState)
+        // console.log(formState)
         setIsValid(e.target.checkValidity())
         setTimeout(() => {
             if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
@@ -152,8 +152,8 @@ export default function ShadowForm(props: iShadowFormProps) {
     };
 
     const submitFormAnsers = () => {
-        console.log('Submitting!...')
-        console.log(formState)
+        // console.log('Submitting!...')
+        // console.log(formState)
 
         const id = getCurrentFormID()
         const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
@@ -244,7 +244,8 @@ export default function ShadowForm(props: iShadowFormProps) {
 
 
     useEffect(() => {
-        console.log('On new Question Speech')
+        // console.log('On new Question Speech')
+
         if (formattedData) {
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
             // console.log(formattedData.pages[pageNumber].items[questionNumber].speech)
@@ -262,14 +263,6 @@ export default function ShadowForm(props: iShadowFormProps) {
             document.removeEventListener('keydown', keyboardPressed)
         }
     }, [formattedData, isValid, pageNumber, questionNumber])
-
-    // useEffect(() => {
-    //     console.log('Initial Speech')
-    //     if (formattedData) {
-    //         sayTheThingWrapper(formattedData.pages[0].items[0].speech)
-    //         // console.log(formattedData.pages[0].items[0].speech)
-    //     }
-    // }, [])
 
     return (
         <div className="flex flex-col items-center ">

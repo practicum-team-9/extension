@@ -21,7 +21,7 @@ export default function ShadowQuestion(props: iShadowQuestionProps) {
         } else if (textRef.current) {
             textRef.current.focus();
         } else if (selectRef.current) {
-            selectRef.current.focus();
+            selectRef.current.focus();            
         }
     }, [props.shadowQuestionData])
 
