@@ -18,21 +18,43 @@ export default function Popup() {
     const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
+        // saveSettingsData(settingsData)
     };
 
     const handleToggleDarkMode = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
+        // saveSettingsData(settingsData)
     };
 
     const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
         console.log('SAVING SETTINGS DATA')
         console.log(settingsData)
         e.preventDefault();
+        saveSettingsData(settingsData)
+    }
+
+    const saveSettingsData = (settingsData: ISettingsData) => {
+        chrome.storage.local.set({ settingsData }, () => {
+            console.log('Сохранено!')
+        }) 
     }
 
     useEffect(() => {
+        console.log(' Первоначальная настройка попапа!')
+        chrome.storage.local.get(["settingsData"], (result) => {
+            console.log('Getting data from storage')
+            if (result.settingsData) {
+                setSettingsData(result.settingsData)
+                console.log(settingsData)
+                document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
+            }
+        });
+    }, [])
+
+    useEffect(() => {
         console.log('Применяю настройки!')
+        console.log(settingsData)
         document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
     }, [settingsData])
 
