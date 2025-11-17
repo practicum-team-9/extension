@@ -3,7 +3,7 @@ import { iShadowFormData, iShadowFormDropDownItemsData } from "../../App";
 import AccentButton from "../../components/buttons/AccentButton";
 import CommonButton from "../../components/buttons/CommonButton";
 import ShadowQuestion from "./shadowQuestion/ShadowQuestion";
-import { sayTheThing } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
+import { sayTheThing, sayTheThingDelayed } from "@/entrypoints/content/scripts/speechScripts/sayTheThing";
 import { HTMLInputTypeAttribute } from "react";
 import { getCurrentFormID } from "@/entrypoints/content/scripts/utilityScripts/getCurrentFormID";
 import CommonBtn from "../../components/buttons/btnContainers/CommonBtn";
@@ -121,8 +121,12 @@ export default function ShadowForm(props: iShadowFormProps) {
         sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
     }
 
-    const sayTheThingWrapper = (thing: string) => {
-        sayTheThing(thing)
+    const sayTheThingWrapper = (thing: string, delay?: number) => {
+        if (delay) {
+            sayTheThingDelayed(thing, delay)
+        } else {
+            sayTheThing(thing)
+        }
     }
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -138,17 +142,26 @@ export default function ShadowForm(props: iShadowFormProps) {
         }
         // console.log(formState)
         setIsValid(e.target.checkValidity())
-        setTimeout(() => {
-            if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
-                if (e.target.checked) {
-                    sayTheThingWrapper(`Вы отметили поле.`)
-                } else {
-                    sayTheThingWrapper(`Вы сняли отметку.`)
-                }
+        if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+            if (e.target.checked) {
+                sayTheThingWrapper(`Вы отметили поле.`, 1000)
             } else {
-                sayTheThingWrapper(`Вы ввели ${value}`)
+                sayTheThingWrapper(`Вы сняли отметку.`, 1000)
             }
-        }, 1000)
+        } else {
+            sayTheThingWrapper(`Вы ввели ${value}`, 1000)
+        }
+        // setTimeout(() => {
+        //     if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
+        //         if (e.target.checked) {
+        //             sayTheThingWrapper(`Вы отметили поле.`)
+        //         } else {
+        //             sayTheThingWrapper(`Вы сняли отметку.`)
+        //         }
+        //     } else {
+        //         sayTheThingWrapper(`Вы ввели ${value}`)
+        //     }
+        // }, 1000)
     };
 
     const submitFormAnsers = () => {
@@ -199,13 +212,14 @@ export default function ShadowForm(props: iShadowFormProps) {
                 }
                 
                 if (item.type === 'date') {
-                    speech += 'Введите дату в формате День Месяц Год.'
+                    speech += 'Введите дату \n'
                     questionType = 'date'
                 } else if (item.type === 'enum') {
                     speech += 'Выберите один вариант из предложенных: \n'
                     questionType = 'dropdown'
-                    item.items?.forEach((dropDownItem) => {
-                        speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
+                    item.items?.forEach((dropDownItem, index) => {
+                        //speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
+                        speech += `Вариант ${index+1}  ${dropDownItem.label} }\n`
                     })
                 } else if (item.type === 'boolean') {
                     speech += 'Нажмите поле чтобы подтвердить или снять подтверждение.'
