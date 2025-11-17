@@ -144,12 +144,12 @@ export default function ShadowForm(props: iShadowFormProps) {
         setIsValid(e.target.checkValidity())
         if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
             if (e.target.checked) {
-                sayTheThingWrapper(`Вы отметили поле.`)
+                sayTheThingWrapper(`Вы отметили поле.`, 1000)
             } else {
-                sayTheThingWrapper(`Вы сняли отметку.`)
+                sayTheThingWrapper(`Вы сняли отметку.`, 1000)
             }
         } else {
-            sayTheThingWrapper(`Вы ввели ${value}`)
+            sayTheThingWrapper(`Вы ввели ${value}`, 1000)
         }
         // setTimeout(() => {
         //     if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
