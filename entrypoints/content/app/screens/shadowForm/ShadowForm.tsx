@@ -212,13 +212,14 @@ export default function ShadowForm(props: iShadowFormProps) {
                 }
                 
                 if (item.type === 'date') {
-                    speech += 'Введите дату в формате День Месяц Год.'
+                    speech += 'Введите дату \n'
                     questionType = 'date'
                 } else if (item.type === 'enum') {
                     speech += 'Выберите один вариант из предложенных: \n'
                     questionType = 'dropdown'
-                    item.items?.forEach((dropDownItem) => {
-                        speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
+                    item.items?.forEach((dropDownItem, index) => {
+                        //speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
+                        speech += `Вариант ${index+1}  ${dropDownItem.label} }\n`
                     })
                 } else if (item.type === 'boolean') {
                     speech += 'Нажмите поле чтобы подтвердить или снять подтверждение.'
