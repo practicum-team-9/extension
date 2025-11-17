@@ -17,3 +17,11 @@ export const sayTheThing = async (thing: string) => {
 
     return true;
 }
+
+export const sayTheThingDelayed = (thing: string, delay?: number) => {
+    sayTheThing(thing)
+    window.speechSynthesis.pause()
+    setTimeout(() => {
+        window.speechSynthesis.resume()
+        }, delay ? delay : 1000)
+}
