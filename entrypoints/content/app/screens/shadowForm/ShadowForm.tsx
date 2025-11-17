@@ -219,7 +219,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                     questionType = 'dropdown'
                     item.items?.forEach((dropDownItem, index) => {
                         //speech += `Вариант ${dropDownItem.id}  ${dropDownItem.label} }\n`
-                        speech += `Вариант ${index+1}  ${dropDownItem.label} }\n`
+                        speech += `Вариант ${index+1}  ${dropDownItem.label}\n`
                     })
                 } else if (item.type === 'boolean') {
                     speech += 'Нажмите поле чтобы подтвердить или снять подтверждение.'
