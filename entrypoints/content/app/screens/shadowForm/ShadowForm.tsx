@@ -79,24 +79,33 @@ export default function ShadowForm(props: iShadowFormProps) {
         teaser: true,
     })
 
+    const mockItem: iShadowFormPageItemsFormatted = {
+                    hidden: false,
+                    id: 'Загружаем...',
+                    label: 'Загружаем...',
+                    multiline: false,
+                    type: 'Загружаем...',
+                    validationArray: [],
+                    questionType: 'text',
+                    speech: 'Загружаем...'
+                }
+
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
-        } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
+        } else if (props.shadowFormData.pages[pageNumber] && questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
             // console.log('Moving to the next page')
-            if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
+            if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
-            if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
+            if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
         }
     }
@@ -106,19 +115,20 @@ export default function ShadowForm(props: iShadowFormProps) {
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            // sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
         }
     }
 
     const repeatItPlease = () => {
-        sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+        if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber])
+            {
+                sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+            }
     }
 
     const sayTheThingWrapper = (thing: string, delay?: number) => {
@@ -260,9 +270,8 @@ export default function ShadowForm(props: iShadowFormProps) {
     useEffect(() => {
         // console.log('On new Question Speech')
 
-        if (formattedData) {
+        if (formattedData && formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber]) {
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
-            // console.log(formattedData.pages[pageNumber].items[questionNumber].speech)
             }
 
         const keyboardPressed = (event: KeyboardEvent) => {
@@ -282,7 +291,7 @@ export default function ShadowForm(props: iShadowFormProps) {
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]} formState={formState}/>
+                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber] ? formattedData.pages[pageNumber].items[questionNumber] : mockItem} formState={formState}/>
                 <div className="flex flex-row justify-between">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={previousQuestion} text={"Назад"} />
@@ -295,7 +304,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
                     <div>Страница: {pageNumber+1}</div>
-                    <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber].items.length}</div>
+                    <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber] ? props.shadowFormData.pages[pageNumber].items.length : null}</div>
                 </div>
             </div>
         </div>

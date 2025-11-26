@@ -116,6 +116,7 @@ export default function App() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json();
+                console.log('Fetch')
                 setFormData(result);
             } catch (error) {
                 console.log(error);
@@ -143,8 +144,8 @@ export default function App() {
     }, [elementsVisibility])
 
     useEffect(() => {              
-        // console.log('Settings data application')
-        // console.log(settingsData)
+        console.log('Settings data application')
+        console.log(settingsData)
         document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData?.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
     }, [settingsData])
 
