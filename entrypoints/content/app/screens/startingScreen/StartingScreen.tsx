@@ -4,11 +4,9 @@ import CommonButton from "../../components/buttons/CommonButton";
 import MenuBtn from "../../components/buttons/btnContainers/MenuBtn";
 
 interface iStartingScreenProps {
-    isVisible: boolean,
     startInShadowForm: (event: React.MouseEvent<HTMLButtonElement>) => void;
     startWithout: (event: React.MouseEvent<HTMLButtonElement>) => void;
     showTheFinalScreen: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    showLoader: () => void;
 }
 
 export default function StartingScreen(props: iStartingScreenProps) {

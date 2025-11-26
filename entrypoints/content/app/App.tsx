@@ -151,23 +151,19 @@ export default function App() {
                 <>
                     {elementsVisibility.startingScreen ? 
                     <StartingScreen 
-                    isVisible={elementsVisibility.startingScreen} 
                     startWithout={hideModal} 
                     startInShadowForm={startInShadowForm}
                     showTheFinalScreen={showTheFinalScreen} 
-                    showLoader={() => {
-                        setLoading(true)
-                        setElementsVisibility({
-                            startingScreen: false,
-                            shadowForm: false,
-                            finalScreen: false
-                        })
-                    }} /> : 
+                    /> : 
                     <></> }
                 </>
                 <>
                     {elementsVisibility.shadowForm ? 
-                    <ShadowForm shadowFormData={formData} previousScreen={showTheStartingScreen} nextScreen={showTheFinalScreen} /> : 
+                    <ShadowForm 
+                    shadowFormData={formData} 
+                    previousScreen={showTheStartingScreen} 
+                    nextScreen={showTheFinalScreen}    
+                    /> : 
                     <></> }
                 </>
                 <>

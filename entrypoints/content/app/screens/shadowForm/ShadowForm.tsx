@@ -57,6 +57,7 @@ export default function ShadowForm(props: iShadowFormProps) {
     const [ pageNumber, setPageNumber ] = useState(0)
     const [ isValid, setIsValid ] = useState(true)
     const [ formState, setFormState ] = useState<iSubmitAnswers>({})
+    const [submitting, setSubmitting] = useState(false);
     const [ formattedData, setFormattedData ] = useState<iShadowFormFormatted>({
         footer: true,
         id: 'Загружаем...',
@@ -110,7 +111,6 @@ export default function ShadowForm(props: iShadowFormProps) {
     }
 
     const previousQuestion = () => {
-        const maxPages = props.shadowFormData.pages.length
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
@@ -149,7 +149,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        // console.log(formState)
         setIsValid(e.target.checkValidity())
         if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
             if (e.target.checked) {
@@ -160,23 +159,11 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             sayTheThingWrapper(`Вы ввели ${value}`, 1000)
         }
-        // setTimeout(() => {
-        //     if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
-        //         if (e.target.checked) {
-        //             sayTheThingWrapper(`Вы отметили поле.`)
-        //         } else {
-        //             sayTheThingWrapper(`Вы сняли отметку.`)
-        //         }
-        //     } else {
-        //         sayTheThingWrapper(`Вы ввели ${value}`)
-        //     }
-        // }, 1000)
     };
 
     const submitFormAnsers = () => {
-        // console.log('Submitting!...')
-        // console.log(formState)
-
+        // props.showLoader()
+        setSubmitting(true)
         const id = getCurrentFormID()
         const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
         fetch(fetchUrl, {
@@ -188,9 +175,14 @@ export default function ShadowForm(props: iShadowFormProps) {
         })
         .then(response => response.json())
         .then(data => {
+            setSubmitting(false)
             props.nextScreen()
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error)
+            alert('Не удалось отправить ответы!')
+            setSubmitting(false)
+        });
 
     }
 
@@ -267,7 +259,6 @@ export default function ShadowForm(props: iShadowFormProps) {
 
 
     useEffect(() => {
-        // console.log('On new Question Speech')
 
         if (formattedData && formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber]) {
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
@@ -275,7 +266,6 @@ export default function ShadowForm(props: iShadowFormProps) {
 
         const keyboardPressed = (event: KeyboardEvent) => {
             if (event.key === 'Enter' && isValid) {
-                //console.log(formattedData)
                 nextQuestion()
             }
         }
@@ -298,7 +288,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                         <CommonButton onClick={repeatItPlease} text={"Повторить"} />
                     </CommonBtn>
                     <CommonBtn isAccent={true}>
-                        <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
+                        <AccentButton disabled={!isValid || submitting} onClick={nextQuestion} text={submitting ? "Отправляю..." : "Вперед"} />
                     </CommonBtn>
                 </div>
                 <div className="flex flex-row justify-between h-8 text-[#26262699]">
