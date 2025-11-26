@@ -96,7 +96,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
         } else if (props.shadowFormData.pages[pageNumber] && questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
-            // console.log('Moving to the next page')
             if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
