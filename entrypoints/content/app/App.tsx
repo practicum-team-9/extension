@@ -6,6 +6,7 @@ import Loader from "./components/loader/Loader";
 import StartingScreen from "./screens/startingScreen/StartingScreen";
 import ShadowForm from "./screens/shadowForm/ShadowForm";
 import FinalScreen from "./screens/finalScreen/FinalScreen";
+import ErrorScreen from "./screens/errorScreen/ErrorScreen";
 
 export interface iShadowFormDropDownItemsData {
     id: string,
@@ -146,10 +147,10 @@ export default function App() {
         <div>
             <Modal isVisible={isModalVisible}>
                 <>{loading ? <Loader /> : <></>}</>
+                <>{isFailedToLoad ? <ErrorScreen startWithout={hideModal} /> : <></>}</>
                 <>
                     {elementsVisibility.startingScreen ? 
                     <StartingScreen 
-                    isFailedToLoad={isFailedToLoad}
                     isVisible={elementsVisibility.startingScreen} 
                     startWithout={hideModal} 
                     startInShadowForm={startInShadowForm}
