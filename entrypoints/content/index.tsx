@@ -1,7 +1,7 @@
 import "../popup/style.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { newFormLoaded } from "./scripts/script";
+// import { newFormLoaded } from "./scripts/script";
 import App from "./app/App";
 
 export default defineContentScript({

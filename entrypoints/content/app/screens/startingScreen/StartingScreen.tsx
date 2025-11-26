@@ -5,7 +5,6 @@ import MenuBtn from "../../components/buttons/btnContainers/MenuBtn";
 
 interface iStartingScreenProps {
     isVisible: boolean,
-    startInDOM: (event: React.MouseEvent<HTMLButtonElement>) => void;
     startInShadowForm: (event: React.MouseEvent<HTMLButtonElement>) => void;
     startWithout: (event: React.MouseEvent<HTMLButtonElement>) => void;
     showTheFinalScreen: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -25,16 +24,3 @@ export default function StartingScreen(props: iStartingScreenProps) {
         </div>
     )
 }
-
-/*
-Debugging menu
-<MenuBtn>
-    <CommonButton text='Начать (Устаревшее)' onClick={props.startInDOM}/>
-</MenuBtn>
-<MenuBtn>
-    <CommonButton text='Показать последний' onClick={props.showTheFinalScreen}/>
-</MenuBtn>
-<MenuBtn>
-    <CommonButton text='Показать загрузчик' onClick={props.showLoader}/>
-</MenuBtn>
-*/

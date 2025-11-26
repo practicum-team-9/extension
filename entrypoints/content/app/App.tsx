@@ -1,6 +1,6 @@
 import "@/assets/tailwind.css";
 import Modal from "./components/modal/Modal";
-import { newFormLoaded } from "../scripts/script";
+// import { newFormLoaded } from "../scripts/script";
 import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettingsData";
 import { getCurrentFormID } from "../scripts/utilityScripts/getCurrentFormID";
 import Loader from "./components/loader/Loader";
@@ -73,10 +73,10 @@ export default function App() {
         setIsModalVisible(false)
     }
 
-    const startInDOM = () => {
-        hideModal();
-        newFormLoaded();
-    }
+    // const startInDOM = () => {
+    //     hideModal();
+    //     // newFormLoaded();
+    // }
 
     const startInShadowForm = () => {
         setElementsVisibility(
@@ -158,7 +158,6 @@ export default function App() {
                     {elementsVisibility.startingScreen ? 
                     <StartingScreen 
                     isVisible={elementsVisibility.startingScreen} 
-                    startInDOM={startInDOM} 
                     startWithout={hideModal} 
                     startInShadowForm={startInShadowForm}
                     showTheFinalScreen={showTheFinalScreen} 
