@@ -18,18 +18,14 @@ export default function Popup() {
     const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
-        // saveSettingsData(settingsData)
     };
 
     const handleToggleDarkMode = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
         setSettingsData((prev: ISettingsData) => ({...prev, [name]: checked}))
-        // saveSettingsData(settingsData)
     };
 
     const handleSubmit = (e: React.MouseEvent<HTMLElement>) => {
-        // console.log('SAVING SETTINGS DATA')
-        // console.log(settingsData)
         e.preventDefault();
         saveSettingsData(settingsData)
     }
@@ -41,20 +37,15 @@ export default function Popup() {
     }
 
     useEffect(() => {
-        // console.log(' Первоначальная настройка попапа!')
         chrome.storage.local.get(["settingsData"], (result) => {
-            // console.log('Getting data from storage')
             if (result.settingsData) {
                 setSettingsData(result.settingsData)
-                // console.log(settingsData)
                 document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
             }
         });
     }, [])
 
     useEffect(() => {
-        // console.log('Применяю настройки!')
-        // console.log(settingsData)
         document.documentElement.classList.toggle( "dark",  !settingsData.isLightTheme);
     }, [settingsData])
 
@@ -87,12 +78,3 @@ export default function Popup() {
         </div>
     )
 }
-
-/* 
-
-            <h2 className='text-2xl text-center'>API-ключ для Yandex SpeechKit</h2>
-            <label>
-                <input value={settingsData.apiKey} type="text" name="apiKey" placeholder={"Введите ваш API ключ"} className='text-2xl text-center rounded-2xl w-full p-1 min-h-[64px] 
-                bg-[#E5E5E5] dark:bg-gray-500' onChange={handleChange} />
-            </label>
-            */ 
