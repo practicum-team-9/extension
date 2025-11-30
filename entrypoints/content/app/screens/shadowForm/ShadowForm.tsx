@@ -281,7 +281,7 @@ export default function ShadowForm(props: iShadowFormProps) {
             <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
                 <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber] ? formattedData.pages[pageNumber].items[questionNumber] : mockItem} formState={formState}/>
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-row justify-between py-2">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={previousQuestion} text={"Назад"} />
                     </CommonBtn><CommonBtn isAccent={false}>
