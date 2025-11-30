@@ -291,7 +291,7 @@ export default function ShadowForm(props: iShadowFormProps) {
                         <AccentButton disabled={!isValid || submitting} onClick={nextQuestion} text={submitting ? "Отправляю..." : "Вперед"} />
                     </CommonBtn>
                 </div>
-                <div className="flex flex-row justify-between h-8 text-[#26262699]">
+                <div className="flex flex-row justify-between h-8">
                     <div>Страница: {pageNumber+1}</div>
                     <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber] ? props.shadowFormData.pages[pageNumber].items.length : null}</div>
                 </div>
