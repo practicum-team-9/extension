@@ -57,6 +57,7 @@ export default function ShadowForm(props: iShadowFormProps) {
     const [ pageNumber, setPageNumber ] = useState(0)
     const [ isValid, setIsValid ] = useState(true)
     const [ formState, setFormState ] = useState<iSubmitAnswers>({})
+    const [submitting, setSubmitting] = useState(false);
     const [ formattedData, setFormattedData ] = useState<iShadowFormFormatted>({
         footer: true,
         id: 'Загружаем...',
@@ -79,46 +80,54 @@ export default function ShadowForm(props: iShadowFormProps) {
         teaser: true,
     })
 
+    const mockItem: iShadowFormPageItemsFormatted = {
+                    hidden: false,
+                    id: 'Загружаем...',
+                    label: 'Загружаем...',
+                    multiline: false,
+                    type: 'Загружаем...',
+                    validationArray: [],
+                    questionType: 'text',
+                    speech: 'Загружаем...'
+                }
+
     const nextQuestion = () => {
         const maxPages = props.shadowFormData.pages.length
 
         if (pageNumber+1 == maxPages && questionNumber+1 == props.shadowFormData.pages[maxPages-1].items.length) {
             submitFormAnsers()
-        } else if (questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
-            // console.log('Moving to the next page')
-            if (formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
+        } else if (props.shadowFormData.pages[pageNumber] && questionNumber+1 == props.shadowFormData.pages[pageNumber].items.length) {
+            if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber+1].items[0].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // sayTheThingWrapper(formattedData.pages[pageNumber+1].items[0].speech)
             setPageNumber(pageNumber+1)
             setQuestionNumber(0)
         } else {
-            if (formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
+            if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber+1].validationArray?.includes('required')) {
                 setIsValid(false)
             }
-            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber+1].speech)
             setQuestionNumber(questionNumber+1)
         }
     }
 
     const previousQuestion = () => {
-        const maxPages = props.shadowFormData.pages.length
         if (pageNumber == 0 && questionNumber == 0) {
             props.previousScreen()
         } else if (questionNumber == 0) {
-            // sayTheThingWrapper(formattedData.pages[pageNumber-1].items[0].speech)
             setPageNumber(pageNumber-1)
             setQuestionNumber(0)
             setIsValid(true)
         } else {
-            // sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber-1].speech)
             setQuestionNumber(questionNumber-1)
             setIsValid(true)
         }
     }
 
     const repeatItPlease = () => {
-        sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+        if (formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber])
+            {
+                sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
+            }
     }
 
     const sayTheThingWrapper = (thing: string, delay?: number) => {
@@ -140,7 +149,6 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             setFormState((prevState: iSubmitAnswers) => ({...prevState, [name]: value}))
         }
-        // console.log(formState)
         setIsValid(e.target.checkValidity())
         if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
             if (e.target.checked) {
@@ -151,23 +159,11 @@ export default function ShadowForm(props: iShadowFormProps) {
         } else {
             sayTheThingWrapper(`Вы ввели ${value}`, 1000)
         }
-        // setTimeout(() => {
-        //     if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
-        //         if (e.target.checked) {
-        //             sayTheThingWrapper(`Вы отметили поле.`)
-        //         } else {
-        //             sayTheThingWrapper(`Вы сняли отметку.`)
-        //         }
-        //     } else {
-        //         sayTheThingWrapper(`Вы ввели ${value}`)
-        //     }
-        // }, 1000)
     };
 
     const submitFormAnsers = () => {
-        // console.log('Submitting!...')
-        // console.log(formState)
-
+        // props.showLoader()
+        setSubmitting(true)
         const id = getCurrentFormID()
         const fetchUrl = `https://api.forms.yandex.net/v1/surveys/${id}/form`
         fetch(fetchUrl, {
@@ -179,9 +175,14 @@ export default function ShadowForm(props: iShadowFormProps) {
         })
         .then(response => response.json())
         .then(data => {
+            setSubmitting(false)
             props.nextScreen()
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error)
+            alert('Не удалось отправить ответы!')
+            setSubmitting(false)
+        });
 
     }
 
@@ -258,16 +259,13 @@ export default function ShadowForm(props: iShadowFormProps) {
 
 
     useEffect(() => {
-        // console.log('On new Question Speech')
 
-        if (formattedData) {
+        if (formattedData && formattedData.pages[pageNumber] && formattedData.pages[pageNumber].items[questionNumber]) {
             sayTheThingWrapper(formattedData.pages[pageNumber].items[questionNumber].speech)
-            // console.log(formattedData.pages[pageNumber].items[questionNumber].speech)
             }
 
         const keyboardPressed = (event: KeyboardEvent) => {
             if (event.key === 'Enter' && isValid) {
-                //console.log(formattedData)
                 nextQuestion()
             }
         }
@@ -282,20 +280,20 @@ export default function ShadowForm(props: iShadowFormProps) {
         <div className="flex flex-col items-center ">
             <h1 className="text-5xl text-center mb-6">{props.shadowFormData.name}</h1>
             <div className="w-3xl h-100 border border-[#E5E5E5] rounded-3xl flex flex-col p-6 justify-between">
-                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber].items[questionNumber]} formState={formState}/>
-                <div className="flex flex-row justify-between">
+                <ShadowQuestion onChange={handleChange} shadowQuestionData={formattedData.pages[pageNumber] ? formattedData.pages[pageNumber].items[questionNumber] : mockItem} formState={formState}/>
+                <div className="flex flex-row justify-between py-2">
                     <CommonBtn isAccent={false}>
                         <CommonButton onClick={previousQuestion} text={"Назад"} />
                     </CommonBtn><CommonBtn isAccent={false}>
                         <CommonButton onClick={repeatItPlease} text={"Повторить"} />
                     </CommonBtn>
                     <CommonBtn isAccent={true}>
-                        <AccentButton disabled={!isValid} onClick={nextQuestion} text={"Вперед"} />
+                        <AccentButton disabled={!isValid || submitting} onClick={nextQuestion} text={submitting ? "Отправляю..." : "Вперед"} />
                     </CommonBtn>
                 </div>
-                <div className="flex flex-row justify-between h-8 text-[#26262699]">
+                <div className="flex flex-row justify-between h-8">
                     <div>Страница: {pageNumber+1}</div>
-                    <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber].items.length}</div>
+                    <div>{questionNumber+1}/{props.shadowFormData.pages[pageNumber] ? props.shadowFormData.pages[pageNumber].items.length : null}</div>
                 </div>
             </div>
         </div>

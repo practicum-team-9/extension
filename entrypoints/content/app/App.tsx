@@ -1,12 +1,12 @@
 import "@/assets/tailwind.css";
 import Modal from "./components/modal/Modal";
-import { newFormLoaded } from "../scripts/script";
 import { useSettingsData } from "@/entrypoints/hooks/useSettingsData/useSettingsData";
 import { getCurrentFormID } from "../scripts/utilityScripts/getCurrentFormID";
 import Loader from "./components/loader/Loader";
 import StartingScreen from "./screens/startingScreen/StartingScreen";
 import ShadowForm from "./screens/shadowForm/ShadowForm";
 import FinalScreen from "./screens/finalScreen/FinalScreen";
+import ErrorScreen from "./screens/errorScreen/ErrorScreen";
 
 export interface iShadowFormDropDownItemsData {
     id: string,
@@ -61,7 +61,7 @@ export default function App() {
         teaser: true,
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [ isFailedToLoad, setIsFailedToLoad] = useState(false);
 
     const [ elementsVisibility, setElementsVisibility ] = useState<iElementsVisibility>({
         startingScreen: false,
@@ -71,11 +71,6 @@ export default function App() {
 
     const hideModal = () => {
         setIsModalVisible(false)
-    }
-
-    const startInDOM = () => {
-        hideModal();
-        newFormLoaded();
     }
 
     const startInShadowForm = () => {
@@ -119,6 +114,7 @@ export default function App() {
                 setFormData(result);
             } catch (error) {
                 console.log(error);
+                setIsFailedToLoad(true)
             } finally {
                 setLoading(false);
                 setElementsVisibility({
@@ -142,9 +138,7 @@ export default function App() {
         }
     }, [elementsVisibility])
 
-    useEffect(() => {              
-        // console.log('Settings data application')
-        // console.log(settingsData)
+    useEffect(() => {    
         document.querySelector('make-access')?.shadowRoot?.querySelector('body')?.classList.toggle("dark",  !settingsData?.isLightTheme || (!settingsData && window.matchMedia("(prefers-color-scheme: dark)").matches))
     }, [settingsData])
 
@@ -153,27 +147,23 @@ export default function App() {
         <div>
             <Modal isVisible={isModalVisible}>
                 <>{loading ? <Loader /> : <></>}</>
+                <>{isFailedToLoad ? <ErrorScreen startWithout={hideModal} /> : <></>}</>
                 <>
                     {elementsVisibility.startingScreen ? 
                     <StartingScreen 
-                    isVisible={elementsVisibility.startingScreen} 
-                    startInDOM={startInDOM} 
                     startWithout={hideModal} 
                     startInShadowForm={startInShadowForm}
                     showTheFinalScreen={showTheFinalScreen} 
-                    showLoader={() => {
-                        setLoading(true)
-                        setElementsVisibility({
-                            startingScreen: false,
-                            shadowForm: false,
-                            finalScreen: false
-                        })
-                    }} /> : 
+                    /> : 
                     <></> }
                 </>
                 <>
                     {elementsVisibility.shadowForm ? 
-                    <ShadowForm shadowFormData={formData} previousScreen={showTheStartingScreen} nextScreen={showTheFinalScreen} /> : 
+                    <ShadowForm 
+                    shadowFormData={formData} 
+                    previousScreen={showTheStartingScreen} 
+                    nextScreen={showTheFinalScreen}    
+                    /> : 
                     <></> }
                 </>
                 <>
@@ -183,6 +173,5 @@ export default function App() {
                 </>
             </ Modal>
         </div>
-)
-    
+    )    
 }

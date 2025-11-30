@@ -1,7 +1,6 @@
 import "../popup/style.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { newFormLoaded } from "./scripts/script";
 import App from "./app/App";
 
 export default defineContentScript({
@@ -39,19 +38,6 @@ export default defineContentScript({
         ui.mount()            
       }
     } 
-
-    chrome.runtime.onMessage.addListener(
-      async (message, sender, sendResponse) => {
-        switch (message.action) {
-          case "newForm":
-            sendResponse({ status: "New Form action handled"})
-            newFormLoaded()
-            break;
-
-          default:
-            break;
-        }
-    })
   },
 });
 
